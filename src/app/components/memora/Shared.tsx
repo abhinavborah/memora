@@ -84,11 +84,11 @@ export function StepItem({ number, title, description }: { number: number; title
 }
 
 // ─── Streak Badge ─────────────────────────────────────────────────────────────
-export function StreakBadge({ days }: { days: number }) {
+export function StreakBadge({ streak }: { streak: number }) {
   return (
     <Badge className="bg-[#F4C430] text-[#1A1A1A] font-bold text-xs px-2 py-0.5 rounded-full hover:bg-[#F4C430]">
       <Flame size={14} className="mr-1" />
-      {days} day streak
+      {streak} day streak
     </Badge>
   );
 }
@@ -340,13 +340,18 @@ export function BottomNav() {
   const location = useLocation();
 
   const tabs = [
-    { icon: Home, label: 'Home', path: '/home' },
+    { icon: Home, label: 'Home', path: '/home/menu' },
     { icon: BookOpen, label: 'Stories', path: '/stories' },
     { icon: Gamepad2, label: 'Games', path: '/games' },
     { icon: User, label: 'Profile', path: '/profile' },
   ];
 
-  const active = (path: string) => location.pathname === path;
+  const active = (path: string) => {
+    if (path === '/home/menu') {
+      return location.pathname === '/home/menu' || location.pathname === '/home';
+    }
+    return location.pathname === path;
+  };
 
   return (
     <nav className="fixed bottom-0 w-full bg-white border-t border-[#D4CFC0] flex justify-around py-3 pb-6 z-50 rounded-t-2xl shadow-[0_-4px_20px_rgba(0,0,0,0.05)]">

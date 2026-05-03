@@ -34,6 +34,8 @@ interface AppState {
   setSelectedArtStyle: (s: string) => void;
   saathiCorner: 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right';
   setSaathiCorner: (s: 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right') => void;
+  hasSeenWelcome: boolean;
+  setHasSeenWelcome: (v: boolean) => void;
   logout: () => void;
 }
 
@@ -56,6 +58,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   const [uploadedPhotos, setUploadedPhotos] = useState<string[]>([]);
   const [selectedArtStyle, setSelectedArtStyle] = useState('');
   const [saathiCorner, setSaathiCorner] = useState<'top-left' | 'top-right' | 'bottom-left' | 'bottom-right'>('bottom-right');
+  const [hasSeenWelcome, setHasSeenWelcome] = useState(false);
 
   const [stories, setStories] = useState<Story[]>(INITIAL_STORIES);
 
@@ -68,6 +71,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     setSelectedArtStyle('');
     setReadAloud(false);
     setPhoneNumber('');
+    setHasSeenWelcome(false);
   };
 
   return (
@@ -83,6 +87,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       uploadedPhotos, setUploadedPhotos,
       selectedArtStyle, setSelectedArtStyle,
       saathiCorner, setSaathiCorner,
+      hasSeenWelcome, setHasSeenWelcome,
       logout,
     }}>
       {children}

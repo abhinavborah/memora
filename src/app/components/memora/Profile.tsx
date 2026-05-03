@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router';
-import { ArrowLeft, Plus, Settings, Bell, Shield, ChevronRight } from 'lucide-react';
+import { ArrowLeft, Plus, Settings, Bell, Shield, ChevronRight, Flame, Flower2, Sparkles, User, Check } from 'lucide-react';
 import { Screen } from './Shared';
 import { useApp } from '../../context/AppContext';
 import { Card, CardContent } from '../ui/card';
@@ -29,8 +29,8 @@ export function ProfileScreen() {
     <Screen withNav withSaathi className="pt-0">
       {/* Profile header */}
       <div className="relative bg-gradient-to-br from-[#312E81] via-[#4F46E5] to-[#7C3AED] px-5 pt-12 pb-8 overflow-hidden">
-        <div className="absolute top-4 right-4 text-5xl opacity-10">🪷</div>
-        <div className="absolute bottom-2 left-4 text-3xl opacity-10 rotate-12">✨</div>
+        <div className="absolute top-4 right-4 opacity-10"><Flower2 size={48} className="text-white" /></div>
+        <div className="absolute bottom-2 left-4 opacity-10 rotate-12"><Sparkles size={32} className="text-white" /></div>
 
         <div className="flex flex-col items-center gap-3">
           <img
@@ -44,16 +44,22 @@ export function ProfileScreen() {
             <p className="text-white/60 text-sm">Member since 2026</p>
           </div>
           <div className="flex gap-6 mt-1">
-            {[
-              { val: stories.length, label: 'Stories' },
-              { val: `${streak}🔥`, label: 'Streak' },
-              { val: `${gardenFlowers}🌸`, label: 'Flowers' },
-            ].map(({ val, label }) => (
-              <div key={label} className="text-center">
-                <p className="font-bold text-white text-lg">{val}</p>
-                <p className="text-white/60 text-xs">{label}</p>
-              </div>
-            ))}
+            <div className="text-center">
+              <p className="font-bold text-white text-lg">{stories.length}</p>
+              <p className="text-white/60 text-xs">Stories</p>
+            </div>
+            <div className="text-center">
+              <p className="font-bold text-white text-lg flex items-center justify-center gap-1">
+                {streak} <Flame size={18} className="text-white" />
+              </p>
+              <p className="text-white/60 text-xs">Streak</p>
+            </div>
+            <div className="text-center">
+              <p className="font-bold text-white text-lg flex items-center justify-center gap-1">
+                {gardenFlowers} <Flower2 size={18} className="text-white" />
+              </p>
+              <p className="text-white/60 text-xs">Flowers</p>
+            </div>
           </div>
         </div>
       </div>
@@ -153,7 +159,7 @@ export function ProfileScreen() {
 
 // ─── Contacts Screen ──────────────────────────────────────────────────────────
 const CONTACTS = ['Aditya', 'Amish', 'Arun', 'Bhaskar', 'Brijesh', 'Chandan', 'Deepika', 'Gopal'];
-const AVATARS = ['👨', '👦', '🧔', '👴', '🧑', '👱', '👩', '👨‍🦳'];
+// Replaced emoji avatars with Lucide User icons below
 
 export function ContactsScreen() {
   const navigate = useNavigate();
@@ -183,7 +189,7 @@ export function ContactsScreen() {
           type="text"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          placeholder="🔍 Search contacts..."
+          placeholder="Search contacts..."
           className="w-full px-4 py-3 rounded-2xl border-2 border-[#D4CFC0] text-[#1A1A1A] mb-4 text-sm focus-visible:ring-0 focus:border-[#7B9EC8] h-auto"
         />
 
@@ -200,11 +206,11 @@ export function ContactsScreen() {
                     }`}
                   >
                     <div
-                      className={`w-11 h-11 rounded-full border-2 flex items-center justify-center text-xl flex-shrink-0 transition-colors ${
+                      className={`w-11 h-11 rounded-full border-2 flex items-center justify-center flex-shrink-0 transition-colors ${
                         isSelected ? 'border-[#7B9EC8] bg-[#DBEAFE]' : 'border-[#D4CFC0] bg-[#F5F1E8]'
                       }`}
                     >
-                      {AVATARS[i % AVATARS.length]}
+                      <User size={20} className={isSelected ? 'text-[#7B9EC8]' : 'text-[#888]'} />
                     </div>
                     <span className="font-bold text-[#1A1A1A] flex-1">{name}</span>
                     <Checkbox
@@ -224,14 +230,18 @@ export function ContactsScreen() {
       <div className="px-5 pb-4 pt-3">
         <button
           onClick={() => navigate('/profile')}
-          className={`w-full py-4 rounded-2xl font-black tracking-widest text-sm border-2 transition-all shadow-md ${
+          className={`w-full py-4 rounded-2xl font-bold tracking-wide text-sm border-2 transition-all shadow-md ${
             selected.length > 0
               ? 'bg-[#1A1A1A] border-[#1A1A1A] text-white hover:bg-[#C1622F] hover:border-[#C1622F]'
               : 'bg-white border-[#D4CFC0] text-[#888]'
           }`}
         >
           {selected.length > 0
-            ? `✓ Add ${selected.length} Member${selected.length > 1 ? 's' : ''}`
+            ? (
+              <span className="flex items-center justify-center gap-1.5">
+                <Check size={16} /> Add {selected.length} Member{selected.length > 1 ? 's' : ''}
+              </span>
+            )
             : 'Select Contacts'}
         </button>
       </div>
