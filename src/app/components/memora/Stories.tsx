@@ -348,7 +348,7 @@ export function ShareWisdom() {
               <div className="flex flex-col items-center gap-4 py-6">
                 <p className="text-xs tracking-wide font-semibold text-[#888]">Tap the mic to start</p>
                 <div className="relative">
-                  <div className="absolute inset-0 rounded-full bg-[#C1622F]/20 animate-ping" style={{ animationDuration: '2s' }} />
+                  <div className="absolute inset-0 rounded-full bg-[#C1622F]/20 animate-ping pointer-events-none" style={{ animationDuration: '2s' }} />
                   <RecordingButton isRecording={false} onPress={() => navigate('/recording')} size={100} />
                 </div>
                 <p className="tracking-wide font-bold text-[#1A1A1A] text-sm">Begin recording</p>
