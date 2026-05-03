@@ -334,7 +334,7 @@ export function ShareWisdom() {
               + Create New
             </TabsTrigger>
             <TabsTrigger value="library" className="flex-1 rounded-xl text-sm font-bold data-[state=active]:bg-white data-[state=active]:text-[#1A1A1A] data-[state=active]:shadow-lg text-white/80 py-2">
-              📚 My Stories
+              My Stories
             </TabsTrigger>
           </TabsList>
         </Tabs>
@@ -360,8 +360,8 @@ export function ShareWisdom() {
               {stories.length > 0 && (
                 <button onClick={() => navigate('/stories/review')}
                   className="w-full flex items-center gap-4 p-4 bg-white rounded-2xl border-2 border-[#D4CFC0] hover:border-[#C1622F] transition-all shadow-sm hover:shadow-md group">
-                  <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-[#FEF3C7] to-[#FCD34D] flex items-center justify-center text-3xl flex-shrink-0 shadow-sm">
-                    {stories[0].emoji}
+                  <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-[#FEF3C7] to-[#FCD34D] flex items-center justify-center flex-shrink-0 shadow-sm">
+                    <Sparkles size={24} color="#92400E" />
                   </div>
                   <div className="text-left flex-1">
                     <p className="font-bold text-[#1A1A1A] text-base">{stories[0].title}</p>
@@ -645,7 +645,7 @@ export function ArtStyleSelect() {
       </div>
 
       <div className="grid grid-cols-2 gap-3 mb-5">
-        {ART_STYLES.map(({ id, label, img, emoji }) => (
+        {ART_STYLES.map(({ id, label, img }) => (
           <button key={id} onClick={() => setSelectedArtStyle(id)}
             className={`relative flex flex-col p-0.5 rounded-2xl transition-all ${selectedArtStyle===id?'ring-[3px] ring-[#C1622F] ring-offset-1 scale-[1.03] shadow-xl':'opacity-80 hover:opacity-100'}`}>
             <div className="w-full aspect-square rounded-[14px] overflow-hidden">
@@ -653,7 +653,7 @@ export function ArtStyleSelect() {
             </div>
             <div className="absolute bottom-7 left-0 right-0 flex justify-center">
               <span className="bg-black/60 text-white text-xs px-2 py-0.5 rounded-full font-bold backdrop-blur-sm">
-                {emoji} {label}
+                {label}
               </span>
             </div>
             {selectedArtStyle === id && (
@@ -855,7 +855,7 @@ export function VideoPreview() {
       transcript={activeTranscript || SAMPLE_TRANSCRIPT}
       onShare={() => {
         setStories([{
-          id: Date.now().toString(), title: 'New Memory', emoji: '✨',
+          id: Date.now().toString(), title: 'New Memory',
           daysAgo: 0, transcript: activeTranscript || SAMPLE_TRANSCRIPT,
           artStyle: selectedArtStyle, photos: uploadedPhotos, videoReady: true,
         }, ...stories]);
@@ -1035,10 +1035,10 @@ function StoryShare({ videoUrl, onBack }: { videoUrl: string | null; onBack: () 
   const styleData = ART_STYLES.find(s => s.id === selectedArtStyle) ?? ART_STYLES[0];
 
   const apps = [
-    { id: 'whatsapp',  emoji: '💬', label: 'WhatsApp',  bg: '#DCFCE7' },
-    { id: 'instagram', emoji: '📸', label: 'Instagram', bg: '#FCE7F3' },
-    { id: 'email',     emoji: '✉️', label: 'Email',     bg: '#DBEAFE' },
-    { id: 'x',         emoji: '𝕏', label: 'X',         bg: '#F3F4F6' },
+    { id: 'whatsapp',  emoji: null, label: 'WhatsApp',  bg: '#DCFCE7' },
+    { id: 'instagram', emoji: null, label: 'Instagram', bg: '#FCE7F3' },
+    { id: 'email',     emoji: null, label: 'Email',     bg: '#DBEAFE' },
+    { id: 'x',         emoji: null, label: 'X',         bg: '#F3F4F6' },
   ];
 
   return (
@@ -1082,11 +1082,11 @@ function StoryShare({ videoUrl, onBack }: { videoUrl: string | null; onBack: () 
         </motion.div>
       ) : (
         <div className="flex justify-around mb-5">
-          {apps.map(({ id, emoji, label, bg }) => (
+          {apps.map(({ id, label, bg }) => (
             <button key={id} onClick={() => setShared(id)}
               className="flex flex-col items-center gap-2 hover:scale-110 active:scale-95 transition-transform">
-              <div className="w-14 h-14 rounded-2xl flex items-center justify-center text-2xl shadow-md border border-[#D4CFC0]"
-                style={{ backgroundColor: bg }}>{emoji}</div>
+              <div className="w-14 h-14 rounded-2xl flex items-center justify-center shadow-md border border-[#D4CFC0]"
+                style={{ backgroundColor: bg }} />
               <span className="text-xs font-semibold text-[#888]">{label}</span>
             </button>
           ))}

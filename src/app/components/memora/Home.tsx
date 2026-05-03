@@ -139,7 +139,7 @@ export function Dashboard() {
             <p className="font-bold text-[#1A1A1A] text-lg">Play Games</p>
             <p className="text-sm text-[#888] mt-0.5">Daily missions with family</p>
             <div className="flex items-center gap-1 mt-1.5">
-              <span className="text-xs text-[#888]">🌸 {gardenFlowers} flowers in your garden</span>
+              <span className="text-xs text-[#888]">{gardenFlowers} flowers in your garden</span>
             </div>
           </div>
           <ChevronRight size={20} color="#7B9EC8" className="group-hover:translate-x-1 transition-transform flex-shrink-0" />

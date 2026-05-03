@@ -97,7 +97,7 @@ export function ProfileScreen() {
                       </p>
                     </div>
                     <button className="w-8 h-8 rounded-lg bg-[#F5F1E8] border border-[#D4CFC0] flex items-center justify-center">
-                      <span className="text-sm">🎙️</span>
+                      <span className="text-sm font-bold text-[#7B9EC8]">Vo</span>
                     </button>
                   </div>
                   {i < FAMILY.length - 1 && <Separator className="mx-4 w-auto bg-[#E8E4DA]" />}

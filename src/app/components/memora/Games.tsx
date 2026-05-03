@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router';
-import { ArrowLeft, Check, ChevronRight, Zap } from 'lucide-react';
+import { ArrowLeft, Check, ChevronRight, Zap, Mic } from 'lucide-react';
 import { Screen, FlowerGarden, StreakBadge, RecordingButton, Waveform, PrimaryBtn, SecondaryBtn } from './Shared';
 import { useApp } from '../../context/AppContext';
 import { motion, AnimatePresence } from 'motion/react';
@@ -43,11 +43,11 @@ export function Garden() {
         <div className="mt-5 flex flex-col gap-3">
           <motion.div whileTap={{ scale: 0.97 }}>
             <PrimaryBtn onClick={() => navigate('/games/missions')}>
-              🎯 TODAY'S MISSIONS →
+              Today's Missions →
             </PrimaryBtn>
           </motion.div>
           <SecondaryBtn onClick={() => navigate('/games/missions')}>
-            🏆 VIEW ALL REWARDS
+            View All Rewards
           </SecondaryBtn>
         </div>
 
@@ -66,9 +66,9 @@ export function Garden() {
 
 // ─── Daily Missions ───────────────────────────────────────────────────────────
 const MISSIONS = [
-  { id: 'breakfast', label: 'Share a photo of breakfast', emoji: '🍱', xp: 10 },
-  { id: 'priya', label: 'Ask Priya about her picnic', emoji: '🎙️', xp: 20, isVoice: true },
-  { id: 'meditate', label: 'Meditate for 2 mins', emoji: '🧘', xp: 15 },
+  { id: 'breakfast', label: 'Share a photo of breakfast', xp: 10 },
+  { id: 'priya', label: 'Ask Priya about her picnic', xp: 20, isVoice: true },
+  { id: 'meditate', label: 'Meditate for 2 mins', xp: 15 },
 ];
 
 export function DailyMissions() {
@@ -117,7 +117,7 @@ export function DailyMissions() {
         </div>
 
         <div className="flex flex-col gap-3 mb-5">
-          {MISSIONS.map(({ id, label, emoji, xp, isVoice }) => {
+          {MISSIONS.map(({ id, label, xp, isVoice }) => {
             const done = completedMissions.includes(label);
             return (
               <motion.button
@@ -127,13 +127,13 @@ export function DailyMissions() {
                 className={`flex items-center gap-3 p-4 rounded-2xl border-2 transition-all text-left ${done ? 'bg-[#F0FDF4] border-[#86EFAC]' : 'bg-white border-[#D4CFC0] hover:border-[#1A1A1A] hover:shadow-md'}`}
               >
                 <div className={`w-11 h-11 rounded-xl flex items-center justify-center text-xl flex-shrink-0 ${done ? 'bg-[#DCFCE7]' : 'bg-[#F5F1E8]'}`}>
-                  {emoji}
+                  {isVoice ? <Mic size={20} color="#7B9EC8" /> : <Zap size={20} color="#F59E0B" />}
                 </div>
                 <div className="flex-1">
                   <span className={`font-bold text-sm ${done ? 'line-through text-[#888]' : 'text-[#1A1A1A]'}`}>{label}</span>
                   <div className="flex items-center gap-2 mt-1">
                     <span className="text-xs font-bold text-[#F59E0B] bg-[#FEF3C7] px-1.5 py-0.5 rounded-full">+{xp} XP</span>
-                    {isVoice && !done && <span className="text-xs font-semibold text-[#7B9EC8]">🎙️ VOICE NOTE</span>}
+                    {isVoice && !done && <span className="text-xs font-semibold text-[#7B9EC8]">VOICE NOTE</span>}
                   </div>
                 </div>
                 <div className={`w-7 h-7 rounded-lg border-2 flex items-center justify-center flex-shrink-0 transition-all ${done ? 'bg-[#10B981] border-[#10B981]' : 'border-[#D4CFC0]'}`}>
@@ -253,7 +253,7 @@ export function VoiceNoteMission() {
               onClick={() => navigate('/games/voice-note/sent')}
               className="flex-1 py-4 rounded-2xl bg-[#1A1A1A] border-2 border-[#1A1A1A] font-bold text-white tracking-wide text-sm hover:bg-[#C1622F] transition-colors"
             >
-              Send ✈️
+              Send
             </button>
           </div>
         ) : (
@@ -361,7 +361,7 @@ export function VoiceNoteSent() {
           disabled={!hasResponse}
           className={`w-full py-4 rounded-2xl border-2 font-bold tracking-wide text-sm transition-all ${hasResponse ? 'bg-[#1A1A1A] border-[#1A1A1A] text-white hover:bg-[#C1622F] hover:border-[#C1622F]' : 'border-[#D4CFC0] text-[#C8C3B4] bg-white cursor-not-allowed'}`}
         >
-          {hasResponse ? '🌸 Collect Daily Reward' : 'Collect Daily Reward'}
+          {hasResponse ? 'Collect Daily Reward' : 'Collect Daily Reward'}
         </button>
       </div>
     </Screen>
@@ -419,7 +419,7 @@ export function NewFlowerBloomed() {
           disabled={collected}
           className={`w-full py-4 rounded-2xl border-2 font-bold tracking-wide text-sm transition-all shadow-md ${collected ? 'bg-[#10B981] border-[#10B981] text-white' : 'bg-[#1A1A1A] border-[#1A1A1A] text-white hover:bg-[#C1622F] hover:border-[#C1622F]'}`}
         >
-          {collected ? '✓ Reward Collected! Going back…' : "🌸 Collect Today's Reward"}
+          {collected ? 'Reward Collected! Going back…' : "Collect Today's Reward"}
         </button>
         <button
           onClick={() => navigate('/games/missions')}
