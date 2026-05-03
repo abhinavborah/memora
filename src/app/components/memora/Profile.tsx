@@ -17,7 +17,7 @@ const FAMILY = [
 // ─── Profile Screen ───────────────────────────────────────────────────────────
 export function ProfileScreen() {
   const navigate = useNavigate();
-  const { userName, streak, stories, gardenFlowers } = useApp();
+  const { userName, streak, stories, gardenFlowers, logout } = useApp();
 
   const settings = [
     { icon: Bell, label: 'Notifications', sub: 'Daily reminders & updates' },
@@ -141,7 +141,7 @@ export function ProfileScreen() {
 
         {/* Log out */}
         <button
-          onClick={() => navigate('/')}
+          onClick={() => { logout(); navigate('/'); }}
           className="w-full py-3.5 rounded-2xl border-2 border-red-200 font-bold text-red-500 bg-red-50 hover:bg-red-100 transition-colors mb-2"
         >
           Log Out

@@ -43,3 +43,14 @@ body {
     scroll-behavior: auto !important;
   }
 }
+
+/* Hide scrollbars on phone screen aspect ratios */
+@media (max-width: 640px) {
+  * {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  *::-webkit-scrollbar {
+    display: none;
+  }
+}

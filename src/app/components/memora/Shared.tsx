@@ -303,23 +303,33 @@ export function FlowerGarden({ count }: { count: number }) {
     }));
   }, []);
 
+  const flowerImage = count === 3 ? '/memora/flower3.jpg' : count === 4 ? '/memora/flower4.jpg' : null;
+
   return (
-    <div className="relative h-32 bg-gradient-to-b from-[#F0F9E8] to-[#E8F5E0] rounded-2xl border-2 border-[#D4CFC0] overflow-hidden">
-      {positions.map((pos, i) => (
-        <div
-          key={i}
-          className="absolute transition-opacity duration-500"
-          style={{
-            left: pos.left,
-            top: pos.top,
-            transform: `scale(${pos.scale}) rotate(${pos.rotate}deg)`,
-            opacity: i < count ? 1 : 0.15,
-            fontSize: 24,
-          }}
-        >
-          {flowers[i % flowers.length]}
-        </div>
-      ))}
+    <div className="relative bg-gradient-to-b from-[#F0F9E8] to-[#E8F5E0] rounded-2xl border-2 border-[#D4CFC0] overflow-hidden">
+      {flowerImage ? (
+        <img
+          src={flowerImage}
+          alt={`Garden with ${count} flowers`}
+          className="w-full h-auto object-contain"
+        />
+      ) : (
+        positions.map((pos, i) => (
+          <div
+            key={i}
+            className="absolute transition-opacity duration-500"
+            style={{
+              left: pos.left,
+              top: pos.top,
+              transform: `scale(${pos.scale}) rotate(${pos.rotate}deg)`,
+              opacity: i < count ? 1 : 0.15,
+              fontSize: 24,
+            }}
+          >
+            {flowers[i % flowers.length]}
+          </div>
+        ))
+      )}
     </div>
   );
 }
