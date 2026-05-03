@@ -69,9 +69,11 @@ export function Dashboard() {
             <h1 className="text-[28px] font-extrabold text-white leading-tight">{userName}!</h1>
           </div>
           <div className="flex flex-col items-end gap-2">
-            <div className="w-10 h-10 rounded-full bg-white/20 border-2 border-white/40 flex items-center justify-center">
-              <span className="text-xl">🪷</span>
-            </div>
+            <img
+              src="/memora/grandma_pfp.png"
+              alt="Meena"
+              className="w-10 h-10 rounded-full object-cover border-2 border-white/40"
+            />
             <StreakBadge streak={streak} />
           </div>
         </div>

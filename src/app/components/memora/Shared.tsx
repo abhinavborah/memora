@@ -1,7 +1,8 @@
-import React from 'react';
-import { motion } from 'framer-motion';
+import React, { useState, useEffect, useRef } from 'react';
+import { motion, animate, useMotionValue } from 'framer-motion';
 import { useNavigate, useLocation } from 'react-router';
 import { Home, BookOpen, Gamepad2, User, Flame, Mic } from 'lucide-react';
+import { useApp } from '../../context/AppContext';
 import { Button } from '../ui/button';
 import { Card as ShadcnCard } from '../ui/card';
 import { Badge } from '../ui/badge';
@@ -117,29 +118,122 @@ export function ProgressBar({ progress, className = '' }: { progress: number; cl
 // ─── Saathi Avatar ────────────────────────────────────────────────────────────
 export function SaathiAvatar({ size = 48 }: { size?: number }) {
   return (
-    <img
-      src="/memora/saathi.png"
-      alt="Saathi"
-      width={size}
-      height={size}
-      className="rounded-full object-cover border-2 border-[#7B9EC8]"
-    />
+    <div
+      className="rounded-full overflow-hidden border-2 border-[#7B9EC8] bg-[#7B9EC8]"
+      style={{ width: size, height: size }}
+    >
+      <img
+        src="/memora/saathi.png"
+        alt="Saathi"
+        width={size}
+        height={size}
+        className="w-full h-full object-cover"
+      />
+    </div>
   );
 }
 
 // ─── Saathi FAB ───────────────────────────────────────────────────────────────
 export function SaathiFab() {
   const navigate = useNavigate();
+  const { saathiCorner, setSaathiCorner } = useApp();
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
+  const [wasDragged, setWasDragged] = useState(false);
+  const hasPositioned = useRef(false);
+
+  const buttonSize = 56;
+  const padding = 16;
+  const bottomOffset = 96; // matches bottom-24, stays above navbar
+
+  const getConstraints = () => {
+    if (typeof window === 'undefined') {
+      return { left: -300, right: 0, top: -600, bottom: 0 };
+    }
+    const vw = window.innerWidth;
+    const vh = window.innerHeight;
+    return {
+      left: -(vw - buttonSize - padding * 2),
+      right: 0,
+      top: -(vh - buttonSize - bottomOffset - padding),
+      bottom: 0,
+    };
+  };
+
+  const getCornerPosition = (corner: string) => {
+    const c = getConstraints();
+    switch (corner) {
+      case 'top-left': return { x: c.left, y: c.top };
+      case 'top-right': return { x: 0, y: c.top };
+      case 'bottom-left': return { x: c.left, y: 0 };
+      case 'bottom-right': return { x: 0, y: 0 };
+      default: return { x: 0, y: 0 };
+    }
+  };
+
+  // Set initial position on mount (no animation on page switches)
+  useEffect(() => {
+    if (!hasPositioned.current) {
+      const target = getCornerPosition(saathiCorner);
+      x.set(target.x);
+      y.set(target.y);
+      hasPositioned.current = true;
+    }
+  }, [saathiCorner]);
+
+  const handleDrag = (_: any, info: any) => {
+    if (Math.abs(info.offset.x) > 5 || Math.abs(info.offset.y) > 5) {
+      setWasDragged(true);
+    }
+  };
+
+  const handleDragEnd = () => {
+    const c = getConstraints();
+    const currentX = x.get();
+    const currentY = y.get();
+
+    // Find closest corner
+    const corners = [
+      { name: 'top-left', x: c.left, y: c.top },
+      { name: 'top-right', x: 0, y: c.top },
+      { name: 'bottom-left', x: c.left, y: 0 },
+      { name: 'bottom-right', x: 0, y: 0 },
+    ];
+
+    const closest = corners.reduce((best, corner) => {
+      const dist = Math.hypot(currentX - corner.x, currentY - corner.y);
+      return dist < best.dist ? { ...corner, dist } : best;
+    }, { name: 'bottom-right', x: 0, y: 0, dist: Infinity });
+
+    // Animate to closest corner
+    animate(x, closest.x, { type: 'spring', stiffness: 300, damping: 30 });
+    animate(y, closest.y, { type: 'spring', stiffness: 300, damping: 30 });
+    setSaathiCorner(closest.name as any);
+
+    setTimeout(() => setWasDragged(false), 100);
+  };
+
+  const handleClick = () => {
+    if (!wasDragged) navigate('/saathi');
+  };
+
   return (
     <motion.button
-      whileTap={{ scale: 0.9 }}
-      onClick={() => navigate('/saathi')}
-      className="fixed bottom-24 right-4 w-14 h-14 rounded-full flex items-center justify-center shadow-lg z-50 overflow-hidden"
+      drag
+      dragConstraints={getConstraints()}
+      dragElastic={0.1}
+      dragMomentum={false}
+      onDrag={handleDrag}
+      onDragEnd={handleDragEnd}
+      onClick={handleClick}
+      style={{ x, y }}
+      whileTap={{ scale: wasDragged ? 1 : 0.9 }}
+      className="fixed bottom-24 right-4 w-14 h-14 rounded-full flex items-center justify-center shadow-lg z-50 overflow-hidden cursor-grab active:cursor-grabbing bg-[#7B9EC8]"
     >
       <img
         src="/memora/saathi.png"
         alt="Saathi"
-        className="w-full h-full object-cover"
+        className="w-full h-full object-cover pointer-events-none"
       />
     </motion.button>
   );

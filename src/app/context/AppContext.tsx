@@ -32,6 +32,8 @@ interface AppState {
   setUploadedPhotos: (p: string[]) => void;
   selectedArtStyle: string;
   setSelectedArtStyle: (s: string) => void;
+  saathiCorner: 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right';
+  setSaathiCorner: (s: 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right') => void;
 }
 
 const AppContext = createContext<AppState | null>(null);
@@ -46,6 +48,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   const [activeTranscript, setActiveTranscript] = useState('');
   const [uploadedPhotos, setUploadedPhotos] = useState<string[]>([]);
   const [selectedArtStyle, setSelectedArtStyle] = useState('');
+  const [saathiCorner, setSaathiCorner] = useState<'top-left' | 'top-right' | 'bottom-left' | 'bottom-right'>('bottom-right');
 
   const [stories, setStories] = useState<Story[]>([
     { id: '1', title: 'The Mango Farm Heist', emoji: '🥭', daysAgo: 2, transcript: 'Today, I am going to share about how I got caught stealing a mango from a farm...', artStyle: 'anime', videoReady: true },
@@ -65,6 +68,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       activeTranscript, setActiveTranscript,
       uploadedPhotos, setUploadedPhotos,
       selectedArtStyle, setSelectedArtStyle,
+      saathiCorner, setSaathiCorner,
     }}>
       {children}
     </AppContext.Provider>
