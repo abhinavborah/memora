@@ -443,127 +443,6 @@ function StoriesLibrary({ stories }: { stories: any[] }) {
   );
 }
 
-// ─── Voice Light Lines ─────────────────────────────────────────────────────────
-function VoiceLightLines() {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
-
-    let animationId: number;
-    let time = 0;
-
-    const resize = () => {
-      const dpr = window.devicePixelRatio || 1;
-      const rect = canvas.getBoundingClientRect();
-      canvas.width = rect.width * dpr;
-      canvas.height = rect.height * dpr;
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    };
-    resize();
-
-    const lines = [
-      { colorFrom: '#FFB347', colorTo: '#FF6B6B', baseY: 0.35, freq: 0.018, speed: 2.2 },
-      { colorFrom: '#4ECDC4', colorTo: '#A78BFA', baseY: 0.52, freq: 0.014, speed: 1.7 },
-      { colorFrom: '#A78BFA', colorTo: '#FFB347', baseY: 0.69, freq: 0.022, speed: 2.8 },
-    ];
-
-    const animate = () => {
-      const rect = canvas.getBoundingClientRect();
-      const w = rect.width;
-      const h = rect.height;
-
-      ctx.clearRect(0, 0, w, h);
-
-      lines.forEach((line, lineIdx) => {
-        const audioLevel = 0.35 + Math.sin(time * 0.6 + lineIdx * 2.1) * 0.25 + Math.sin(time * 1.3) * 0.15;
-
-        // Luminous trails (3 echo layers)
-        for (let trail = 2; trail >= 0; trail--) {
-          ctx.beginPath();
-          const trailPhase = trail * 0.4;
-          const trailAlpha = 0.12 + (2 - trail) * 0.1;
-          const trailWidth = 2 + trail * 1.5;
-
-          for (let x = 0; x <= w; x += 2) {
-            const wave = Math.sin((x * line.freq) + time * line.speed + trailPhase);
-            const y = line.baseY * h + wave * (18 + audioLevel * 28) * (1 + trail * 0.15);
-            if (x === 0) ctx.moveTo(x, y);
-            else ctx.lineTo(x, y);
-          }
-
-          ctx.strokeStyle = line.colorFrom;
-          ctx.lineWidth = trailWidth;
-          ctx.lineCap = 'round';
-          ctx.lineJoin = 'round';
-          ctx.shadowColor = line.colorTo;
-          ctx.shadowBlur = 12 + trail * 8;
-          ctx.globalAlpha = trailAlpha;
-          ctx.stroke();
-        }
-
-        // Main bright line
-        ctx.beginPath();
-        for (let x = 0; x <= w; x += 2) {
-          const wave = Math.sin((x * line.freq) + time * line.speed);
-          const y = line.baseY * h + wave * (18 + audioLevel * 28);
-          if (x === 0) ctx.moveTo(x, y);
-          else ctx.lineTo(x, y);
-        }
-
-        const gradient = ctx.createLinearGradient(0, 0, w, 0);
-        gradient.addColorStop(0, line.colorFrom);
-        gradient.addColorStop(0.5, line.colorTo);
-        gradient.addColorStop(1, line.colorFrom);
-
-        ctx.strokeStyle = gradient;
-        ctx.lineWidth = 2.5;
-        ctx.lineCap = 'round';
-        ctx.lineJoin = 'round';
-        ctx.shadowColor = line.colorTo;
-        ctx.shadowBlur = 18;
-        ctx.globalAlpha = 0.95;
-        ctx.stroke();
-      });
-
-      ctx.globalAlpha = 1;
-      ctx.shadowBlur = 0;
-
-      time += 0.016;
-      animationId = requestAnimationFrame(animate);
-    };
-
-    animate();
-
-    window.addEventListener('resize', resize);
-    return () => {
-      cancelAnimationFrame(animationId);
-      window.removeEventListener('resize', resize);
-    };
-  }, []);
-
-  return (
-    <motion.div
-      initial={{ opacity: 0, scale: 0.96 }}
-      animate={{ opacity: 1, scale: 1 }}
-      transition={{ duration: 0.5, ease: 'easeOut' }}
-      className="relative w-full h-64 rounded-2xl overflow-hidden"
-    >
-      <canvas ref={canvasRef} className="w-full h-full block" />
-      <motion.p
-        className="absolute inset-0 flex items-center justify-center text-white/70 text-sm font-semibold tracking-wide pointer-events-none"
-        animate={{ opacity: [0.4, 0.8, 0.4] }}
-        transition={{ duration: 2.5, repeat: Infinity, ease: 'easeInOut' }}
-      >
-        Recording your story...
-      </motion.p>
-    </motion.div>
-  );
-}
-
 // ─── Recording Active ──────────────────────────────────────────────────────────
 export function RecordingActive() {
   const navigate = useNavigate();
@@ -571,6 +450,7 @@ export function RecordingActive() {
   const [transcript, setTranscript]   = useState('');
   const [charIndex, setCharIndex]     = useState(0);
   const [elapsed, setElapsed]         = useState(0);
+  const [bars, setBars]               = useState<number[]>(Array(32).fill(20));
 
   useEffect(() => {
     if (charIndex < SAMPLE_TRANSCRIPT.length) {
@@ -584,6 +464,11 @@ export function RecordingActive() {
 
   useEffect(() => {
     const t = setInterval(() => setElapsed(e => e + 1), 1000);
+    return () => clearInterval(t);
+  }, []);
+
+  useEffect(() => {
+    const t = setInterval(() => setBars(prev => prev.map(() => 15 + Math.random() * 50)), 120);
     return () => clearInterval(t);
   }, []);
 
@@ -609,8 +494,11 @@ export function RecordingActive() {
           <h2 className="text-[22px] font-bold text-white">Share Your Wisdom</h2>
           <p className="text-white/50 text-sm mt-0.5">Life lessons for your family</p>
         </div>
-        <div className="mb-4">
-          <VoiceLightLines />
+        <div className="flex items-center justify-center gap-[3px] h-16 px-2 mb-4">
+          {bars.map((h, i) => (
+            <div key={i} className="rounded-full bg-[#C1622F]"
+              style={{ width: 4, height: h, transition: 'height 0.1s ease', opacity: 0.7 + (i%3)*0.1 }} />
+          ))}
         </div>
         <div className="flex flex-col items-center gap-3">
           <p className="text-xs tracking-wide font-semibold text-white/60">TAP TO STOP RECORDING</p>
