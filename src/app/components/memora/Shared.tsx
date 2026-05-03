@@ -1,0 +1,261 @@
+import React from 'react';
+import { motion } from 'framer-motion';
+import { useNavigate, useLocation } from 'react-router';
+import { Home, BookOpen, Gamepad2, User, Flame, Mic } from 'lucide-react';
+import { Button } from '../ui/button';
+import { Card as ShadcnCard } from '../ui/card';
+import { Badge } from '../ui/badge';
+import { Avatar, AvatarImage, AvatarFallback } from '../ui/avatar';
+import { Progress } from '../ui/progress';
+
+// ─── Memora Logo ──────────────────────────────────────────────────────────────
+export function MemoraLogo({ size = 64 }: { size?: number }) {
+  return (
+    <img
+      src="/memora/memora-logo.svg"
+      alt="Memora"
+      width={size}
+      height={size}
+      className="object-contain"
+    />
+  );
+}
+
+// ─── Screen Wrapper ───────────────────────────────────────────────────────────
+export function Screen({ children, withNav = false, withSaathi = false, className = '' }) {
+  return (
+    <div className="min-h-screen bg-[#EDE8DC] flex justify-center">
+      <div className={`w-full max-w-[390px] flex flex-col ${withNav ? 'pb-24' : ''} ${className}`}>
+        {children}
+      </div>
+      {withNav && <BottomNav />}
+      {withSaathi && <SaathiFab />}
+    </div>
+  );
+}
+
+// ─── Buttons ──────────────────────────────────────────────────────────────────
+export function PrimaryBtn({ children, onClick, className = '' }: { children: React.ReactNode; onClick?: () => void; className?: string }) {
+  return (
+    <Button
+      onClick={onClick}
+      className={`w-full bg-[#C1622F] hover:bg-[#A85426] text-white font-bold text-base rounded-2xl py-6 h-auto ${className}`}
+    >
+      {children}
+    </Button>
+  );
+}
+
+export function SecondaryBtn({ children, onClick, className = '' }: { children: React.ReactNode; onClick?: () => void; className?: string }) {
+  return (
+    <Button
+      variant="secondary"
+      onClick={onClick}
+      className={`w-full bg-[#7B9EC8] hover:bg-[#6A8DB7] text-white font-bold text-base rounded-2xl py-6 h-auto ${className}`}
+    >
+      {children}
+    </Button>
+  );
+}
+
+// ─── Card ─────────────────────────────────────────────────────────────────────
+export function Card({ children, className = '' }: { children: React.ReactNode; className?: string }) {
+  return (
+    <ShadcnCard className={`bg-white rounded-2xl shadow-md border-0 ${className}`}>
+      {children}
+    </ShadcnCard>
+  );
+}
+
+// ─── Step Item ────────────────────────────────────────────────────────────────
+export function StepItem({ number, title, description }: { number: number; title: string; description: string }) {
+  return (
+    <div className="flex items-start gap-4">
+      <div className="w-10 h-10 rounded-full bg-[#C1622F] text-white flex items-center justify-center font-extrabold text-lg shrink-0">
+        {number}
+      </div>
+      <div>
+        <p className="font-bold text-[#1A1A1A] text-base">{title}</p>
+        <p className="text-[#888] text-sm mt-0.5 leading-relaxed">{description}</p>
+      </div>
+    </div>
+  );
+}
+
+// ─── Streak Badge ─────────────────────────────────────────────────────────────
+export function StreakBadge({ days }: { days: number }) {
+  return (
+    <Badge className="bg-[#F4C430] text-[#1A1A1A] font-bold text-xs px-2 py-0.5 rounded-full hover:bg-[#F4C430]">
+      <Flame size={14} className="mr-1" />
+      {days} day streak
+    </Badge>
+  );
+}
+
+// ─── Avatar Circle ────────────────────────────────────────────────────────────
+export function AvatarCircle({ name, image, size = 48 }: { name: string; image?: string; size?: number }) {
+  return (
+    <Avatar style={{ width: size, height: size }} className="border-2 border-[#D4CFC0]">
+      {image && <AvatarImage src={image} alt={name} />}
+      <AvatarFallback className="bg-[#C1622F] text-white font-bold text-sm">
+        {name.charAt(0).toUpperCase()}
+      </AvatarFallback>
+    </Avatar>
+  );
+}
+
+// ─── Progress Bar ─────────────────────────────────────────────────────────────
+export function ProgressBar({ progress, className = '' }: { progress: number; className?: string }) {
+  return (
+    <Progress
+      value={progress}
+      className={`h-2 bg-[#7B9EC8]/20 ${className}`}
+    />
+  );
+}
+
+// ─── Saathi Avatar ────────────────────────────────────────────────────────────
+export function SaathiAvatar({ size = 48 }: { size?: number }) {
+  return (
+    <img
+      src="/memora/saathi.png"
+      alt="Saathi"
+      width={size}
+      height={size}
+      className="rounded-full object-cover border-2 border-[#7B9EC8]"
+    />
+  );
+}
+
+// ─── Saathi FAB ───────────────────────────────────────────────────────────────
+export function SaathiFab() {
+  const navigate = useNavigate();
+  return (
+    <motion.button
+      whileTap={{ scale: 0.9 }}
+      onClick={() => navigate('/saathi')}
+      className="fixed bottom-24 right-4 w-14 h-14 rounded-full flex items-center justify-center shadow-lg z-50 overflow-hidden"
+    >
+      <img
+        src="/memora/saathi.png"
+        alt="Saathi"
+        className="w-full h-full object-cover"
+      />
+    </motion.button>
+  );
+}
+
+// ─── Recording Button ─────────────────────────────────────────────────────────
+export function RecordingButton({ isRecording, onPress, size }: { isRecording: boolean; onPress: () => void; size: number }) {
+  return (
+    <motion.button
+      whileTap={{ scale: 0.9 }}
+      onClick={onPress}
+      className={`rounded-full flex items-center justify-center shadow-lg ${
+        isRecording ? 'bg-[#DC2626]' : 'bg-[#C1622F]'
+      }`}
+      style={{ width: size, height: size }}
+    >
+      {isRecording ? (
+        <div className="bg-white rounded-sm" style={{ width: size * 0.28, height: size * 0.28 }} />
+      ) : (
+        <Mic size={size * 0.4} color="white" />
+      )}
+    </motion.button>
+  );
+}
+
+// ─── Waveform ─────────────────────────────────────────────────────────────────
+export function Waveform({ playing = false }: { playing?: boolean }) {
+  const [heights, setHeights] = React.useState(() =>
+    Array.from({ length: 24 }, () => Math.random() * 20 + 8)
+  );
+
+  React.useEffect(() => {
+    if (!playing) return;
+    const interval = setInterval(() => {
+      setHeights(Array.from({ length: 24 }, () => Math.random() * 20 + 8));
+    }, 150);
+    return () => clearInterval(interval);
+  }, [playing]);
+
+  return (
+    <div className="flex items-center justify-center gap-[3px] h-10">
+      {heights.map((h, i) => (
+        <div
+          key={i}
+          className="rounded-full bg-[#C1622F]"
+          style={{
+            width: 3,
+            height: h,
+            transition: 'height 0.15s ease',
+            opacity: 0.6 + (i % 4) * 0.1,
+          }}
+        />
+      ))}
+    </div>
+  );
+}
+
+// ─── Flower Garden ────────────────────────────────────────────────────────────
+export function FlowerGarden({ count }: { count: number }) {
+  const flowers = ['🌸', '🌼', '🌺', '🌻', '🌷', '💐', '🏵️', '🪷'];
+  const positions = React.useMemo(() => {
+    return Array.from({ length: 12 }, (_, i) => ({
+      left: `${(i % 4) * 25 + 10}%`,
+      top: `${Math.floor(i / 4) * 33 + 15}%`,
+      scale: 0.7 + Math.random() * 0.5,
+      rotate: Math.random() * 30 - 15,
+    }));
+  }, []);
+
+  return (
+    <div className="relative h-32 bg-gradient-to-b from-[#F0F9E8] to-[#E8F5E0] rounded-2xl border-2 border-[#D4CFC0] overflow-hidden">
+      {positions.map((pos, i) => (
+        <div
+          key={i}
+          className="absolute transition-opacity duration-500"
+          style={{
+            left: pos.left,
+            top: pos.top,
+            transform: `scale(${pos.scale}) rotate(${pos.rotate}deg)`,
+            opacity: i < count ? 1 : 0.15,
+            fontSize: 24,
+          }}
+        >
+          {flowers[i % flowers.length]}
+        </div>
+      ))}
+    </div>
+  );
+}
+
+// ─── Bottom Nav ───────────────────────────────────────────────────────────────
+export function BottomNav() {
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const tabs = [
+    { icon: Home, label: 'Home', path: '/home' },
+    { icon: BookOpen, label: 'Stories', path: '/stories' },
+    { icon: Gamepad2, label: 'Games', path: '/games' },
+    { icon: User, label: 'Profile', path: '/profile' },
+  ];
+
+  const active = (path: string) => location.pathname === path;
+
+  return (
+    <nav className="fixed bottom-0 w-full max-w-[390px] bg-white border-t border-[#D4CFC0] flex justify-around py-3 pb-6 z-50 rounded-t-2xl shadow-[0_-4px_20px_rgba(0,0,0,0.05)]">
+      {tabs.map((t) => (
+        <button
+          key={t.label}
+          onClick={() => navigate(t.path)}
+          className={`flex flex-col items-center gap-1 transition-colors ${active(t.path) ? 'text-[#C1622F]' : 'text-[#888]'}`}
+        >
+          <t.icon size={22} strokeWidth={active(t.path) ? 2.5 : 2} />
+          <span className="text-xs font-bold">{t.label}</span>
+        </button>
+      ))}
+    </nav>
+  );
+}

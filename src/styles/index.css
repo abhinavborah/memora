@@ -1,0 +1,45 @@
+@import './fonts.css';
+@import './tailwind.css';
+@import './theme.css';
+
+html {
+  /* Slightly larger base for accessibility (17px instead of 16px) */
+  font-size: 17px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  font-family: 'Nunito', 'Segoe UI', system-ui, -apple-system, sans-serif;
+  background-color: #EDE8DC;
+  color: #1A1A1A;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  line-height: 1.6;
+  font-weight: 500;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+/* Focus styles for keyboard accessibility */
+*:focus-visible {
+  outline: 3px solid #7B9EC8;
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Reduce motion for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
