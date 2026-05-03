@@ -37,6 +37,7 @@ export const router = createBrowserRouter([
 
   // Stories flow
   { path: '/stories', Component: ShareWisdom },
+  { path: '/recording', Component: RecordingActive },
   { path: '/stories/recording', Component: RecordingActive },
   { path: '/stories/review', Component: TranscriptionReview },
   { path: '/stories/style', Component: ArtStyleSelect },

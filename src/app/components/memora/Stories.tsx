@@ -2,9 +2,10 @@ import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useNavigate } from 'react-router';
 import {
   ArrowLeft, Plus, Sparkles, X, Play, Pause, RotateCcw,
-  Share2, CheckCircle2, Film, ImagePlus, Volume2, ChevronRight,
-  Mic, Clock, Download,
+  Share2, CheckCircle2, Film, ImagePlus,   Volume2, VolumeX, ChevronRight,
+  Mic, Clock, Download, Keyboard,
 } from 'lucide-react';
+import { FaWhatsapp, FaInstagram, FaCommentDots, FaEnvelope } from 'react-icons/fa';
 import { Screen, RecordingButton } from './Shared';
 import { useApp } from '../../context/AppContext';
 import { motion, AnimatePresence } from 'motion/react';
@@ -29,7 +30,7 @@ const STYLE_LABEL: Record<string, string> = {
   anime: 'Anime', pixar: 'Pixar 3D', sketch: 'Sketch', oil: 'Oil Paint',
 };
 
-const SAMPLE_TRANSCRIPT = `Today, I am going to share about how I got caught stealing a mango from a farm. Me and 3 of my friends — Changu, Mangu and Chintu — were going to school, when on the way we saw a tree with very luscious mangoes, and we all had the same thought. But the problem was, the guy owning that farm was very sulky..`;
+const SAMPLE_TRANSCRIPT = `Yesterday, I went on a walk to the nearby garden, where I saw a beautiful flower. As I approached closer to smell it, I see a bee flying towards me. I had to flee from there haha!`;
 
 // ─── Canvas-based video generation ────────────────────────────────────────────
 
@@ -314,7 +315,7 @@ function ctx2d(canvas: HTMLCanvasElement) {
 // ─── Share Your Wisdom ─────────────────────────────────────────────────────────
 export function ShareWisdom() {
   const navigate = useNavigate();
-  const { stories } = useApp();
+  const { stories, setActiveTranscript } = useApp();
   const [activeTab, setActiveTab] = useState<'create' | 'library'>('create');
 
   return (
@@ -345,12 +346,19 @@ export function ShareWisdom() {
           <TabsContent value="create" className="mt-0">
             <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.25 }}>
               <div className="flex flex-col items-center gap-4 py-6">
-                <p className="text-xs tracking-wide font-semibold text-[#888]">TAP THE MIC TO START</p>
+                <p className="text-xs tracking-wide font-semibold text-[#888]">Tap the mic to start</p>
                 <div className="relative">
                   <div className="absolute inset-0 rounded-full bg-[#C1622F]/20 animate-ping" style={{ animationDuration: '2s' }} />
-                  <RecordingButton isRecording={false} onPress={() => navigate('/stories/recording')} size={100} />
+                  <RecordingButton isRecording={false} onPress={() => navigate('/recording')} size={100} />
                 </div>
-                <p className="tracking-wide font-bold text-[#1A1A1A] text-sm">BEGIN RECORDING</p>
+                <p className="tracking-wide font-bold text-[#1A1A1A] text-sm">Begin recording</p>
+                <button
+                  onClick={() => { setActiveTranscript(''); navigate('/stories/review'); }}
+                  className="flex items-center gap-2 text-sm font-semibold text-[#7B9EC8] hover:text-[#C1622F] transition-colors mt-1"
+                >
+                  <Keyboard size={16} />
+                  Or type your story
+                </button>
               </div>
               <div className="my-5 flex items-center gap-3">
                 <div className="flex-1 h-px bg-[#D4CFC0]" />
@@ -435,6 +443,127 @@ function StoriesLibrary({ stories }: { stories: any[] }) {
   );
 }
 
+// ─── Voice Light Lines ─────────────────────────────────────────────────────────
+function VoiceLightLines() {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    let animationId: number;
+    let time = 0;
+
+    const resize = () => {
+      const dpr = window.devicePixelRatio || 1;
+      const rect = canvas.getBoundingClientRect();
+      canvas.width = rect.width * dpr;
+      canvas.height = rect.height * dpr;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    };
+    resize();
+
+    const lines = [
+      { colorFrom: '#FFB347', colorTo: '#FF6B6B', baseY: 0.35, freq: 0.018, speed: 2.2 },
+      { colorFrom: '#4ECDC4', colorTo: '#A78BFA', baseY: 0.52, freq: 0.014, speed: 1.7 },
+      { colorFrom: '#A78BFA', colorTo: '#FFB347', baseY: 0.69, freq: 0.022, speed: 2.8 },
+    ];
+
+    const animate = () => {
+      const rect = canvas.getBoundingClientRect();
+      const w = rect.width;
+      const h = rect.height;
+
+      ctx.clearRect(0, 0, w, h);
+
+      lines.forEach((line, lineIdx) => {
+        const audioLevel = 0.35 + Math.sin(time * 0.6 + lineIdx * 2.1) * 0.25 + Math.sin(time * 1.3) * 0.15;
+
+        // Luminous trails (3 echo layers)
+        for (let trail = 2; trail >= 0; trail--) {
+          ctx.beginPath();
+          const trailPhase = trail * 0.4;
+          const trailAlpha = 0.12 + (2 - trail) * 0.1;
+          const trailWidth = 2 + trail * 1.5;
+
+          for (let x = 0; x <= w; x += 2) {
+            const wave = Math.sin((x * line.freq) + time * line.speed + trailPhase);
+            const y = line.baseY * h + wave * (18 + audioLevel * 28) * (1 + trail * 0.15);
+            if (x === 0) ctx.moveTo(x, y);
+            else ctx.lineTo(x, y);
+          }
+
+          ctx.strokeStyle = line.colorFrom;
+          ctx.lineWidth = trailWidth;
+          ctx.lineCap = 'round';
+          ctx.lineJoin = 'round';
+          ctx.shadowColor = line.colorTo;
+          ctx.shadowBlur = 12 + trail * 8;
+          ctx.globalAlpha = trailAlpha;
+          ctx.stroke();
+        }
+
+        // Main bright line
+        ctx.beginPath();
+        for (let x = 0; x <= w; x += 2) {
+          const wave = Math.sin((x * line.freq) + time * line.speed);
+          const y = line.baseY * h + wave * (18 + audioLevel * 28);
+          if (x === 0) ctx.moveTo(x, y);
+          else ctx.lineTo(x, y);
+        }
+
+        const gradient = ctx.createLinearGradient(0, 0, w, 0);
+        gradient.addColorStop(0, line.colorFrom);
+        gradient.addColorStop(0.5, line.colorTo);
+        gradient.addColorStop(1, line.colorFrom);
+
+        ctx.strokeStyle = gradient;
+        ctx.lineWidth = 2.5;
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
+        ctx.shadowColor = line.colorTo;
+        ctx.shadowBlur = 18;
+        ctx.globalAlpha = 0.95;
+        ctx.stroke();
+      });
+
+      ctx.globalAlpha = 1;
+      ctx.shadowBlur = 0;
+
+      time += 0.016;
+      animationId = requestAnimationFrame(animate);
+    };
+
+    animate();
+
+    window.addEventListener('resize', resize);
+    return () => {
+      cancelAnimationFrame(animationId);
+      window.removeEventListener('resize', resize);
+    };
+  }, []);
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, scale: 0.96 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{ duration: 0.5, ease: 'easeOut' }}
+      className="relative w-full h-64 rounded-2xl overflow-hidden"
+    >
+      <canvas ref={canvasRef} className="w-full h-full block" />
+      <motion.p
+        className="absolute inset-0 flex items-center justify-center text-white/70 text-sm font-semibold tracking-wide pointer-events-none"
+        animate={{ opacity: [0.4, 0.8, 0.4] }}
+        transition={{ duration: 2.5, repeat: Infinity, ease: 'easeInOut' }}
+      >
+        Recording your story...
+      </motion.p>
+    </motion.div>
+  );
+}
+
 // ─── Recording Active ──────────────────────────────────────────────────────────
 export function RecordingActive() {
   const navigate = useNavigate();
@@ -442,7 +571,6 @@ export function RecordingActive() {
   const [transcript, setTranscript]   = useState('');
   const [charIndex, setCharIndex]     = useState(0);
   const [elapsed, setElapsed]         = useState(0);
-  const [bars, setBars]               = useState<number[]>(Array(32).fill(20));
 
   useEffect(() => {
     if (charIndex < SAMPLE_TRANSCRIPT.length) {
@@ -456,11 +584,6 @@ export function RecordingActive() {
 
   useEffect(() => {
     const t = setInterval(() => setElapsed(e => e + 1), 1000);
-    return () => clearInterval(t);
-  }, []);
-
-  useEffect(() => {
-    const t = setInterval(() => setBars(prev => prev.map(() => 15 + Math.random() * 50)), 120);
     return () => clearInterval(t);
   }, []);
 
@@ -486,11 +609,8 @@ export function RecordingActive() {
           <h2 className="text-[22px] font-bold text-white">Share Your Wisdom</h2>
           <p className="text-white/50 text-sm mt-0.5">Life lessons for your family</p>
         </div>
-        <div className="flex items-center justify-center gap-[3px] h-16 px-2 mb-4">
-          {bars.map((h, i) => (
-            <div key={i} className="rounded-full bg-[#C1622F]"
-              style={{ width: 4, height: h, transition: 'height 0.1s ease', opacity: 0.7 + (i%3)*0.1 }} />
-          ))}
+        <div className="mb-4">
+          <VoiceLightLines />
         </div>
         <div className="flex flex-col items-center gap-3">
           <p className="text-xs tracking-wide font-semibold text-white/60">TAP TO STOP RECORDING</p>
@@ -529,7 +649,7 @@ export function TranscriptionReview() {
   return (
     <Screen withNav withSaathi className="px-5 pt-5">
       <div className="flex items-center justify-between mb-5">
-        <button onClick={() => navigate('/stories/recording')}><ArrowLeft size={24} color="#1A1A1A" /></button>
+        <button onClick={() => navigate(-1)}><ArrowLeft size={24} color="#1A1A1A" /></button>
         <div className="text-center">
           <p className="text-xs font-semibold text-[#888] tracking-wide">STEP 2 OF 4</p>
           <p className="text-sm font-bold text-[#1A1A1A]">Review Transcript</p>
@@ -541,7 +661,7 @@ export function TranscriptionReview() {
       </div>
       <div className="flex flex-col items-center gap-2 mb-4">
         <p className="text-xs tracking-wide font-semibold text-[#888]">TAP TO RE-RECORD</p>
-        <RecordingButton isRecording={false} onPress={() => navigate('/stories/recording')} size={70} />
+                <RecordingButton isRecording={false} onPress={() => navigate('/recording')} size={70} />
       </div>
       <div className="bg-white rounded-2xl border-2 border-[#D4CFC0] p-4 mb-3 flex-1">
         <div className="flex items-center justify-between mb-2">
@@ -626,14 +746,14 @@ export function ArtStyleSelect() {
           ))}
           {uploadedPhotos.length < 8 && (
             <button onClick={() => fileInputRef.current?.click()}
-              className="w-[72px] h-[72px] rounded-xl border-2 border-dashed border-[#C8C3B4] flex flex-col items-center justify-center gap-1 bg-white hover:border-[#C1622F] hover:bg-[#FFF5F1] transition-colors flex-shrink-0">
-              <ImagePlus size={20} color="#C8C3B4" />
-              <span className="text-xs font-semibold text-[#C8C3B4]">ADD</span>
+              className={`rounded-xl border-2 border-dashed border-[#C8C3B4] flex flex-col items-center justify-center gap-1 bg-white hover:border-[#C1622F] hover:bg-[#FFF5F1] transition-colors flex-shrink-0 ${uploadedPhotos.length === 0 ? 'w-[80%] h-32 mx-auto' : 'w-[72px] h-[72px]'}`}>
+              <ImagePlus size={uploadedPhotos.length === 0 ? 32 : 20} color="#C8C3B4" />
+              <span className={`font-semibold text-[#C8C3B4] ${uploadedPhotos.length === 0 ? 'text-sm' : 'text-xs'}`}>Add</span>
             </button>
           )}
         </div>
         {uploadedPhotos.length === 0 && (
-          <p className="text-xs text-[#888] mt-2 italic">
+          <p className="text-xs text-[#888] mt-2 italic text-center">
             Photos optional — we'll generate beautiful AI art scenes if you skip ✨
           </p>
         )}
@@ -778,22 +898,31 @@ export function VideoPreview() {
       <Screen className="px-5 pt-5">
         <div className="flex-1 flex flex-col items-center justify-center gap-6 py-8">
           {/* Animated rings */}
-          <div className="relative w-32 h-32 flex items-center justify-center">
+          <div className="relative w-36 h-36 flex items-center justify-center">
             {[0,1,2].map(i => (
-              <div key={i} className="absolute rounded-full animate-spin"
-                style={{
-                  inset: i * -12,
-                  border: '2px solid transparent',
-                  borderTopColor: i === 0 ? '#C1622F' : 'rgba(193,98,47,0.3)',
-                  borderRightColor: i === 1 ? '#C1622F' : 'transparent',
-                  borderBottomColor: i === 2 ? '#C1622F' : 'transparent',
-                  animationDuration: `${2.5 + i * 0.8}s`,
-                  animationDirection: i % 2 ? 'reverse' : 'normal',
-                }} />
+              <motion.div
+                key={i}
+                className="absolute rounded-full border-2 border-[#C1622F]"
+                style={{ inset: 8 + i * 14 }}
+                animate={{
+                  scale: [1, 1.15, 1],
+                  opacity: [0.5 - i * 0.12, 0.15, 0.5 - i * 0.12],
+                }}
+                transition={{
+                  duration: 2 + i * 0.4,
+                  repeat: Infinity,
+                  ease: 'easeInOut',
+                  delay: i * 0.3,
+                }}
+              />
             ))}
-            <div className="w-16 h-16 rounded-2xl bg-[#1A1A1A] flex items-center justify-center shadow-xl">
+            <motion.div
+              className="w-16 h-16 rounded-2xl bg-[#1A1A1A] flex items-center justify-center shadow-xl relative z-10"
+              animate={{ scale: [1, 1.05, 1] }}
+              transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
+            >
               <Film size={30} color="white" />
-            </div>
+            </motion.div>
           </div>
 
           <div className="text-center">
@@ -822,7 +951,13 @@ export function VideoPreview() {
                   <span className={`text-sm font-bold flex-1 ${active?'text-[#C1622F]':done?'text-[#16A34A]':'text-[#888]'}`}>
                     {step.label}
                   </span>
-                  {active && <div className="w-3 h-3 rounded-full border-2 border-[#C1622F] border-t-transparent animate-spin" />}
+                  {active && (
+                    <motion.div
+                      className="w-3.5 h-3.5 rounded-full border-2 border-[#C1622F] border-t-transparent"
+                      animate={{ rotate: 360 }}
+                      transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
+                    />
+                  )}
                 </motion.div>
               );
             })}
@@ -868,6 +1003,8 @@ export function VideoPreview() {
 }
 
 // ─── Video Player ─────────────────────────────────────────────────────────────
+const DEMO_VIDEO = '/memora/memora_video_gen_demo.mov';
+
 function VideoPlayer({ videoUrl, photos, artStyle, transcript, onShare, onRegenerate, onBack }: {
   videoUrl: string | null;
   photos: string[];
@@ -881,8 +1018,8 @@ function VideoPlayer({ videoUrl, photos, artStyle, transcript, onShare, onRegene
   const [playing, setPlaying]   = useState(false);
   const [progress, setProgress] = useState(0);
   const [duration, setDuration] = useState(0);
-  // Slideshow fallback state (when no real video blob)
-  const [frame, setFrame] = useState(0);
+  const [muted, setMuted]       = useState(true);
+  const [videoAspect, setVideoAspect] = useState<number | null>(null);
 
   const styleData = ART_STYLES.find(s => s.id === artStyle) ?? ART_STYLES[0];
 
@@ -907,23 +1044,10 @@ function VideoPlayer({ videoUrl, photos, artStyle, transcript, onShare, onRegene
     v.currentTime = ((e.clientX - rect.left) / rect.width) * v.duration;
   };
 
-  // Slideshow fallback (when MediaRecorder wasn't available)
-  useEffect(() => {
-    if (videoUrl || !playing) return;
-    const sources = photos.length > 0 ? photos : [styleData.img];
-    const t = setInterval(() => {
-      setFrame(f => (f + 1) % sources.length);
-      setProgress(p => Math.min(p + (100 / (sources.length * 12)), 100));
-    }, 2500);
-    return () => clearInterval(t);
-  }, [playing, videoUrl, photos.length]);
-
   const fmtTime = (pct: number, dur: number) => {
     const s = Math.round((pct / 100) * (dur || 84));
     return `${Math.floor(s/60)}:${String(s%60).padStart(2,'0')}`;
   };
-
-  const fallbackSrc = photos.length > 0 ? photos[frame % photos.length] : styleData.img;
 
   return (
     <Screen withNav withSaathi className="px-5 pt-5">
@@ -934,57 +1058,47 @@ function VideoPlayer({ videoUrl, photos, artStyle, transcript, onShare, onRegene
       </div>
 
       {/* ── Player ── */}
-      <div className="bg-[#0D0D0D] rounded-2xl overflow-hidden shadow-2xl mb-3 relative" style={{ aspectRatio: '16/9' }}>
-        {videoUrl ? (
-          /* Real generated video */
-          <>
-            <video ref={videoRef} src={videoUrl} className="w-full h-full object-cover"
-              onTimeUpdate={onTimeUpdate}
-              onLoadedMetadata={() => setDuration(videoRef.current?.duration ?? 0)}
-              onEnded={() => setPlaying(false)}
-              playsInline />
-            <button onClick={togglePlay}
-              className="absolute inset-0 flex items-center justify-center group">
-              <AnimatePresence>
-                {!playing && (
-                  <motion.div key="play"
-                    initial={{ scale: 0.8, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.8, opacity: 0 }}
-                    className="w-16 h-16 rounded-2xl bg-white/20 backdrop-blur-md border border-white/40 flex items-center justify-center shadow-2xl">
-                    <Play size={24} color="white" className="ml-1" />
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </button>
-          </>
-        ) : (
-          /* Slideshow fallback */
-          <>
-            <img src={fallbackSrc} alt="story frame"
-              className="w-full h-full object-cover transition-all duration-700"
-              style={{ filter: artStyle==='sketch' ? 'grayscale(0.7) contrast(1.2)' : artStyle==='anime' ? 'saturate(1.5) hue-rotate(10deg)' : 'none' }} />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/10" />
-            <button onClick={() => setPlaying(p => !p)}
-              className="absolute inset-0 flex items-center justify-center">
-              {!playing && (
-                <div className="w-14 h-14 rounded-2xl bg-white/20 backdrop-blur-md border border-white/40 flex items-center justify-center">
-                  <Play size={22} color="white" className="ml-0.5" />
-                </div>
-              )}
-            </button>
-          </>
-        )}
+      <div className="bg-[#0D0D0D] rounded-2xl overflow-hidden shadow-2xl mb-3 relative"
+        style={{ aspectRatio: videoAspect ? String(videoAspect) : '16/9' }}>
+        <video ref={videoRef} src={DEMO_VIDEO} className="w-full h-full object-contain"
+          muted={muted}
+          onTimeUpdate={onTimeUpdate}
+          onLoadedMetadata={() => {
+            const v = videoRef.current;
+            if (!v) return;
+            setDuration(v.duration ?? 0);
+            if (v.videoWidth && v.videoHeight) {
+              setVideoAspect(v.videoWidth / v.videoHeight);
+            }
+          }}
+          onEnded={() => setPlaying(false)}
+          playsInline />
+        <button onClick={togglePlay}
+          className="absolute inset-0 flex items-center justify-center group">
+          <AnimatePresence>
+            {!playing && (
+              <motion.div key="play"
+                initial={{ scale: 0.8, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.8, opacity: 0 }}
+                className="w-16 h-16 rounded-2xl bg-white/20 backdrop-blur-md border border-white/40 flex items-center justify-center shadow-2xl">
+                <Play size={24} color="white" className="ml-1" />
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </button>
 
         {/* Style badge */}
         <div className="absolute top-2.5 left-2.5 bg-black/50 backdrop-blur-sm text-white text-xs px-2.5 py-1 rounded-full font-semibold border border-white/15 pointer-events-none">
           {styleData.emoji} {styleData.label}
         </div>
 
-        {/* Real-video badge */}
-        {videoUrl && (
-          <div className="absolute top-2.5 right-2.5 bg-[#10B981]/90 text-white text-xs px-2.5 py-1 rounded-full font-semibold border border-white/20 pointer-events-none">
-            🎬 Real Video
-          </div>
-        )}
+        {/* Sound toggle */}
+        <button
+          onClick={() => setMuted(m => !m)}
+          className="absolute top-2.5 right-2.5 bg-black/50 backdrop-blur-sm text-white text-xs px-2 py-1.5 rounded-full font-semibold border border-white/15 flex items-center gap-1 hover:bg-black/70 transition-colors"
+        >
+          {muted ? <VolumeX size={14} /> : <Volume2 size={14} />}
+          {muted ? 'Off' : 'On'}
+        </button>
       </div>
 
       {/* ── Timeline ── */}
@@ -1002,26 +1116,24 @@ function VideoPlayer({ videoUrl, photos, artStyle, transcript, onShare, onRegene
       </div>
 
       <p className="text-center text-xs text-[#888] mb-4">
-        {videoUrl
-          ? `✅ Real video encoded • ${styleData.label} style${photos.length>0 ? ` • ${photos.length} photo${photos.length>1?'s':''}` : ''}`
-          : `${styleData.label} style${photos.length>0 ? ` • ${photos.length} photo${photos.length>1?'s':''}` : ' • AI art scenes'}`}
+        {`${styleData.label} style${photos.length > 0 ? ` • ${photos.length} photo${photos.length > 1 ? 's' : ''}` : ' • AI art scenes'}`}
       </p>
 
-      <div className="flex gap-3 pb-4">
+      <div className="flex flex-col gap-3 pb-4">
         <button onClick={onRegenerate}
-          className="flex-1 py-3.5 rounded-2xl border-2 border-[#D4CFC0] font-bold text-[#1A1A1A] bg-white text-sm flex items-center justify-center gap-2 hover:border-[#1A1A1A] transition-colors">
+          className="w-full py-3.5 rounded-2xl border-2 border-[#D4CFC0] font-bold text-[#1A1A1A] bg-white text-sm flex items-center justify-center gap-2 hover:border-[#1A1A1A] transition-colors">
           <RotateCcw size={15} /> Regenerate
         </button>
-        {videoUrl && (
-          <a href={videoUrl} download="memora-story.webm"
-            className="py-3.5 px-4 rounded-2xl border-2 border-[#7B9EC8] font-bold text-[#7B9EC8] bg-white text-sm flex items-center justify-center gap-1 hover:bg-[#7B9EC8] hover:text-white transition-colors">
-            <Download size={14} />
+        <div className="flex gap-3">
+          <a href={DEMO_VIDEO} download="memora-story.mov"
+            className="flex-1 py-3.5 rounded-2xl border-2 border-[#7B9EC8] font-bold text-[#7B9EC8] bg-white text-sm flex items-center justify-center gap-2 hover:bg-[#7B9EC8] hover:text-white transition-colors">
+            <Download size={14} /> Download
           </a>
-        )}
-        <button onClick={onShare}
-          className="flex-1 py-3.5 rounded-2xl bg-[#1A1A1A] border-2 border-[#1A1A1A] font-bold text-white text-sm flex items-center justify-center gap-2 hover:bg-[#C1622F] hover:border-[#C1622F] transition-colors">
-          <Share2 size={15} /> Save & Share
-        </button>
+          <button onClick={onShare}
+            className="flex-1 py-3.5 rounded-2xl bg-[#1A1A1A] border-2 border-[#1A1A1A] font-bold text-white text-sm flex items-center justify-center gap-2 hover:bg-[#C1622F] hover:border-[#C1622F] transition-colors">
+            <Share2 size={15} /> Save & Share
+          </button>
+        </div>
       </div>
     </Screen>
   );
@@ -1032,13 +1144,14 @@ function StoryShare({ videoUrl, onBack }: { videoUrl: string | null; onBack: () 
   const navigate = useNavigate();
   const { uploadedPhotos, selectedArtStyle } = useApp();
   const [shared, setShared] = useState<string | null>(null);
+  const [videoAspect, setVideoAspect] = useState<number | null>(null);
   const styleData = ART_STYLES.find(s => s.id === selectedArtStyle) ?? ART_STYLES[0];
 
   const apps = [
-    { id: 'whatsapp',  emoji: null, label: 'WhatsApp',  bg: '#DCFCE7' },
-    { id: 'instagram', emoji: null, label: 'Instagram', bg: '#FCE7F3' },
-    { id: 'email',     emoji: null, label: 'Email',     bg: '#DBEAFE' },
-    { id: 'x',         emoji: null, label: 'X',         bg: '#F3F4F6' },
+    { id: 'whatsapp',  icon: FaWhatsapp,  label: 'WhatsApp',  color: '#25D366', bg: '#DCFCE7' },
+    { id: 'instagram', icon: FaInstagram, label: 'Instagram', color: '#E1306C', bg: '#FCE7F3' },
+    { id: 'sms',       icon: FaCommentDots, label: 'SMS',     color: '#3B82F6', bg: '#DBEAFE' },
+    { id: 'email',     icon: FaEnvelope,  label: 'Email',     color: '#6B7280', bg: '#F3F4F6' },
   ];
 
   return (
@@ -1050,12 +1163,22 @@ function StoryShare({ videoUrl, onBack }: { videoUrl: string | null; onBack: () 
       </div>
 
       {/* Mini preview */}
-      <div className="bg-[#0D0D0D] rounded-2xl overflow-hidden mb-4 shadow-xl relative" style={{ aspectRatio: '16/9' }}>
-        {videoUrl ? (
-          <video src={videoUrl} className="w-full h-full object-cover opacity-90" muted autoPlay loop playsInline />
-        ) : (
-          <img src={uploadedPhotos[0] ?? styleData.img} alt="preview" className="w-full h-full object-cover opacity-80" />
-        )}
+      <div className="bg-[#0D0D0D] rounded-2xl overflow-hidden mb-4 shadow-xl relative"
+        style={{ aspectRatio: videoAspect ? String(videoAspect) : '16/9' }}>
+        <video
+          src={DEMO_VIDEO}
+          className="w-full h-full object-contain opacity-90"
+          muted
+          autoPlay
+          loop
+          playsInline
+          onLoadedMetadata={(e) => {
+            const v = e.currentTarget;
+            if (v.videoWidth && v.videoHeight) {
+              setVideoAspect(v.videoWidth / v.videoHeight);
+            }
+          }}
+        />
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
           <div className="w-12 h-12 rounded-xl bg-white/20 backdrop-blur-md border border-white/40 flex items-center justify-center">
             <Play size={18} color="white" className="ml-0.5" />
@@ -1064,11 +1187,6 @@ function StoryShare({ videoUrl, onBack }: { videoUrl: string | null; onBack: () 
         <div className="absolute bottom-2 left-2 bg-black/50 text-white text-xs px-2 py-0.5 rounded-full font-semibold pointer-events-none">
           {styleData.emoji} {styleData.label}
         </div>
-        {videoUrl && (
-          <div className="absolute bottom-2 right-2 bg-[#10B981]/90 text-white text-xs px-2 py-0.5 rounded-full font-semibold pointer-events-none">
-            🎬 Real Video
-          </div>
-        )}
       </div>
 
       {shared ? (
@@ -1082,23 +1200,23 @@ function StoryShare({ videoUrl, onBack }: { videoUrl: string | null; onBack: () 
         </motion.div>
       ) : (
         <div className="flex justify-around mb-5">
-          {apps.map(({ id, label, bg }) => (
+          {apps.map(({ id, label, bg, color, icon: Icon }) => (
             <button key={id} onClick={() => setShared(id)}
               className="flex flex-col items-center gap-2 hover:scale-110 active:scale-95 transition-transform">
               <div className="w-14 h-14 rounded-2xl flex items-center justify-center shadow-md border border-[#D4CFC0]"
-                style={{ backgroundColor: bg }} />
+                style={{ backgroundColor: bg }}>
+                <Icon size={28} color={color} />
+              </div>
               <span className="text-xs font-semibold text-[#888]">{label}</span>
             </button>
           ))}
         </div>
       )}
 
-      {videoUrl && (
-        <a href={videoUrl} download="memora-story.webm"
-          className="w-full mb-3 py-3.5 rounded-2xl border-2 border-[#7B9EC8] font-bold text-[#7B9EC8] bg-white text-sm flex items-center justify-center gap-2 hover:bg-[#7B9EC8] hover:text-white transition-colors">
-          <Download size={16} /> Download Video File
-        </a>
-      )}
+      <a href={DEMO_VIDEO} download="memora-story.mov"
+        className="w-full mb-3 py-3.5 rounded-2xl border-2 border-[#7B9EC8] font-bold text-[#7B9EC8] bg-white text-sm flex items-center justify-center gap-2 hover:bg-[#7B9EC8] hover:text-white transition-colors">
+        <Download size={16} /> Download Video File
+      </a>
 
       <button onClick={() => navigate('/home/menu')}
         className="w-full py-4 rounded-2xl bg-[#1A1A1A] text-white font-bold tracking-wide text-sm hover:bg-[#C1622F] transition-colors">

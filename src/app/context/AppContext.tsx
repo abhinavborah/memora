@@ -42,7 +42,7 @@ interface AppState {
 const AppContext = createContext<AppState | null>(null);
 
 const INITIAL_STORIES: Story[] = [
-  { id: '1', title: 'The Mango Farm Heist', emoji: '🥭', daysAgo: 2, transcript: 'Today, I am going to share about how I got caught stealing a mango from a farm...', artStyle: 'anime', videoReady: true },
+  { id: '1', title: 'Bee in the Garden', emoji: '🐝', daysAgo: 2, transcript: 'Yesterday, I went on a walk to the nearby garden, where I saw a beautiful flower. As I approached closer to smell it, I see a bee flying towards me. I had to flee from there haha!', artStyle: 'anime', videoReady: true },
   { id: '2', title: 'School Days Memories', emoji: '📚', daysAgo: 5, transcript: 'When I was in school, we used to walk 3 miles every morning...', artStyle: 'sketch', videoReady: true },
   { id: '3', title: 'My Wedding Day', emoji: '💍', daysAgo: 12, transcript: 'It was the most beautiful day of my life, surrounded by family...', artStyle: 'pixar', videoReady: true },
 ];
