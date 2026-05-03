@@ -8,9 +8,13 @@ import { motion } from 'motion/react';
 // ─── Welcome / Splash Home ────────────────────────────────────────────────────
 export function WelcomeHome() {
   const navigate = useNavigate();
-  const { userName, setHasSeenWelcome } = useApp();
+  const { userName, hasSeenWelcome, setHasSeenWelcome } = useApp();
 
   useEffect(() => {
+    if (hasSeenWelcome) {
+      navigate('/home/menu', { replace: true });
+      return;
+    }
     setHasSeenWelcome(true);
     const t = setTimeout(() => navigate('/home/menu'), 2000);
     return () => clearTimeout(t);
