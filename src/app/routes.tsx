@@ -1,4 +1,4 @@
-import { createBrowserRouter } from 'react-router';
+import { createHashRouter } from 'react-router';
 import { SplashScreen, PhoneEntry, OTPVerify, NameSetup } from './components/memora/Auth';
 import { HowStoriesWork, HowGamesWork, MeetSaathi } from './components/memora/Onboarding';
 import { WelcomeHome, Dashboard } from './components/memora/Home';
@@ -19,7 +19,7 @@ import {
 import { ProfileScreen, ContactsScreen } from './components/memora/Profile';
 import { SaathiScreen } from './components/memora/Saathi';
 
-export const router = createBrowserRouter([
+export const router = createHashRouter([
   // Auth flow
   { path: '/', Component: SplashScreen },
   { path: '/phone', Component: PhoneEntry },
