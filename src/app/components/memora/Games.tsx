@@ -314,7 +314,7 @@ export function VoiceNoteSent() {
       {/* Your voice note */}
       <div className="bg-white rounded-2xl border-2 border-[#D4CFC0] p-4 mb-3 shadow-sm">
         <div className="flex items-center gap-2 mb-2">
-          <img src="/memora/grandma_pfp.png" alt="Meena" className="w-8 h-8 rounded-full object-cover" />
+          <img src="memora/grandma_pfp.png" alt="Meena" className="w-8 h-8 rounded-full object-cover" />
           <p className="text-xs font-semibold text-[#888]">Your Note</p>
         </div>
         <div className="flex items-center gap-2">
@@ -335,7 +335,7 @@ export function VoiceNoteSent() {
             className="bg-gradient-to-br from-[#EFF6FF] to-[#DBEAFE] rounded-2xl border-2 border-[#BFDBFE] p-4 mb-4 shadow-sm"
           >
             <div className="flex items-center gap-2 mb-2 flex-row-reverse">
-              <img src="/memora/granddaughter_pfp.png" alt="Priya" className="w-8 h-8 rounded-full object-cover" />
+              <img src="memora/granddaughter_pfp.png" alt="Priya" className="w-8 h-8 rounded-full object-cover" />
               <p className="text-xs font-semibold text-[#888]">Priya's Reply</p>
             </div>
             <div className="flex items-center gap-2 flex-row-reverse">

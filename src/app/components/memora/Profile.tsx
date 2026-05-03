@@ -9,9 +9,9 @@ import { Checkbox } from '../ui/checkbox';
 import { Input } from '../ui/input';
 
 const FAMILY = [
-  { id: '1', name: 'Priya', relation: 'Granddaughter', status: 'Active now', color: '#FCE7F3', textColor: '#BE185D', avatar: '/memora/granddaughter_pfp.png' },
-  { id: '2', name: 'Rajeh', relation: 'Husband', status: 'Last seen yesterday', color: '#DBEAFE', textColor: '#1D4ED8', avatar: '/memora/grandpa_pfp.png' },
-  { id: '3', name: 'Raj', relation: 'Grandson', status: 'Active today', color: '#DCFCE7', textColor: '#15803D', avatar: '/memora/grandson_pfp.png' },
+  { id: '1', name: 'Priya', relation: 'Granddaughter', status: 'Active now', color: '#FCE7F3', textColor: '#BE185D', avatar: 'memora/granddaughter_pfp.png' },
+  { id: '2', name: 'Rajeh', relation: 'Husband', status: 'Last seen yesterday', color: '#DBEAFE', textColor: '#1D4ED8', avatar: 'memora/grandpa_pfp.png' },
+  { id: '3', name: 'Raj', relation: 'Grandson', status: 'Active today', color: '#DCFCE7', textColor: '#15803D', avatar: 'memora/grandson_pfp.png' },
 ];
 
 // ─── Profile Screen ───────────────────────────────────────────────────────────
@@ -34,7 +34,7 @@ export function ProfileScreen() {
 
         <div className="flex flex-col items-center gap-3">
           <img
-            src="/memora/grandma_pfp.png"
+            src="memora/grandma_pfp.png"
             alt="Meena"
             className="rounded-full border-4 border-white/40 shadow-xl object-cover"
             style={{ width: 88, height: 88 }}

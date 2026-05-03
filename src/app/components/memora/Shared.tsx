@@ -13,7 +13,7 @@ import { Progress } from '../ui/progress';
 export function MemoraLogo({ size = 64 }: { size?: number }) {
   return (
     <img
-      src="/memora/memora-logo.svg"
+      src="memora/memora-logo.svg"
       alt="Memora"
       width={size}
       height={size}
@@ -123,7 +123,7 @@ export function SaathiAvatar({ size = 48 }: { size?: number }) {
       style={{ width: size, height: size }}
     >
       <img
-        src="/memora/saathi.png"
+        src="memora/saathi.png"
         alt="Saathi"
         width={size}
         height={size}
@@ -231,7 +231,7 @@ export function SaathiFab() {
       className="fixed bottom-24 right-4 w-14 h-14 rounded-full flex items-center justify-center shadow-lg z-50 overflow-hidden cursor-grab active:cursor-grabbing bg-[#7B9EC8]"
     >
       <img
-        src="/memora/saathi.png"
+        src="memora/saathi.png"
         alt="Saathi"
         className="w-full h-full object-cover pointer-events-none"
       />
@@ -303,7 +303,7 @@ export function FlowerGarden({ count }: { count: number }) {
     }));
   }, []);
 
-  const flowerImage = count === 3 ? '/memora/flower3.jpg' : count === 4 ? '/memora/flower4.jpg' : null;
+  const flowerImage = count === 3 ? 'memora/flower3.jpg' : count === 4 ? 'memora/flower4.jpg' : null;
 
   return (
     <div className="relative bg-gradient-to-b from-[#F0F9E8] to-[#E8F5E0] rounded-2xl border-2 border-[#D4CFC0] overflow-hidden">

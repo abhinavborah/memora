@@ -75,7 +75,7 @@ export function Dashboard() {
           </div>
           <div className="flex flex-col items-end gap-2">
             <img
-              src="/memora/grandma_pfp.png"
+              src="memora/grandma_pfp.png"
               alt="Meena"
               className="w-10 h-10 rounded-full object-cover border-2 border-white/40"
             />

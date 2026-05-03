@@ -891,7 +891,7 @@ export function VideoPreview() {
 }
 
 // ─── Video Player ─────────────────────────────────────────────────────────────
-const DEMO_VIDEO = '/memora/memora_video_gen_demo.mov';
+const DEMO_VIDEO = 'memora/memora_video_gen_demo.mov';
 
 function VideoPlayer({ videoUrl, photos, artStyle, transcript, onShare, onRegenerate, onBack }: {
   videoUrl: string | null;
