@@ -67,7 +67,7 @@ export function SaathiScreen() {
 
   return (
     <div className="min-h-screen bg-black/40 flex items-end justify-center">
-      <div className="w-full max-w-[390px] bg-[#EDE8DC] rounded-t-3xl flex flex-col overflow-hidden" style={{ height: '90vh' }}>
+      <div className="w-full bg-[#EDE8DC] rounded-t-3xl flex flex-col overflow-hidden" style={{ height: '90vh' }}>
         {/* Handle */}
         <div className="flex justify-center pt-3 pb-1">
           <div className="w-10 h-1 bg-[#C8C3B4] rounded-full" />

@@ -326,10 +326,7 @@ export function ShareWisdom() {
               style={{ top: `${10 + i*14}%`, left: `${5 + i*16}%`, transform: `rotate(${i*30}deg)` }}>{e}</span>
           ))}
         </div>
-        <button onClick={() => navigate('/home/menu')} className="mb-3">
-          <ArrowLeft size={22} color="white" />
-        </button>
-        <h2 className="text-[26px] font-bold text-white leading-tight">Share Your Wisdom</h2>
+        <h2 className="text-[26px] font-bold text-white leading-tight mt-2">Share Your Wisdom</h2>
         <p className="text-white/70 mt-1 text-sm">Life lessons for your family</p>
         <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as 'create' | 'library')} className="mt-4">
           <TabsList className="w-full bg-white/10 backdrop-blur-sm rounded-2xl p-1 h-auto">

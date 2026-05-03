@@ -26,7 +26,7 @@ export function MemoraLogo({ size = 64 }: { size?: number }) {
 export function Screen({ children, withNav = false, withSaathi = false, className = '' }) {
   return (
     <div className="min-h-screen bg-[#EDE8DC] flex justify-center">
-      <div className={`w-full max-w-[390px] flex flex-col ${withNav ? 'pb-24' : ''} ${className}`}>
+      <div className={`w-full flex flex-col ${withNav ? 'pb-24' : ''} ${className}`}>
         {children}
       </div>
       {withNav && <BottomNav />}
@@ -339,7 +339,7 @@ export function BottomNav() {
   const active = (path: string) => location.pathname === path;
 
   return (
-    <nav className="fixed bottom-0 w-full max-w-[390px] bg-white border-t border-[#D4CFC0] flex justify-around py-3 pb-6 z-50 rounded-t-2xl shadow-[0_-4px_20px_rgba(0,0,0,0.05)]">
+    <nav className="fixed bottom-0 w-full bg-white border-t border-[#D4CFC0] flex justify-around py-3 pb-6 z-50 rounded-t-2xl shadow-[0_-4px_20px_rgba(0,0,0,0.05)]">
       {tabs.map((t) => (
         <button
           key={t.label}

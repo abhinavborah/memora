@@ -79,7 +79,7 @@ export function MeetSaathi() {
 
   return (
     <div className="min-h-screen bg-black/40 flex items-end justify-center">
-      <div className="w-full max-w-[390px] bg-[#EDE8DC] rounded-t-3xl px-6 pt-4 pb-10 min-h-[70vh] flex flex-col">
+      <div className="w-full bg-[#EDE8DC] rounded-t-3xl px-6 pt-4 pb-10 min-h-[70vh] flex flex-col">
         {/* Handle */}
         <div className="w-10 h-1 bg-[#C8C3B4] rounded-full mx-auto mb-6" />
 
