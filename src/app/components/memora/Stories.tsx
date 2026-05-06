@@ -553,7 +553,16 @@ export function TranscriptionReview() {
       </div>
       <div className="bg-white rounded-2xl border-2 border-[#D4CFC0] p-4 mb-3 flex-1">
         <div className="flex items-center justify-between mb-2">
-          <p className="text-xs font-semibold text-[#888] tracking-wide">TRANSCRIPTION</p>
+          <div className="flex items-center gap-2">
+            <p className="text-xs font-semibold text-[#888] tracking-wide leading-none">TRANSCRIPTION</p>
+            <button
+              onClick={() => setIsPlaying(!isPlaying)}
+              className="inline-flex items-center gap-1 text-xs text-[#7B9EC8] hover:text-[#C1622F] transition-colors leading-none py-0"
+            >
+              {isPlaying ? <Pause size={12} className="relative -top-px" /> : <Play size={12} className="relative -top-px" />}
+              {isPlaying ? 'Stop' : 'Listen'}
+            </button>
+          </div>
           <span className="text-xs text-[#888]">{wordCount} words</span>
         </div>
         <Textarea value={text} onChange={e => setText(e.target.value)}
@@ -564,16 +573,10 @@ export function TranscriptionReview() {
         <span className="text-base">💡</span>
         <p className="text-xs text-[#92400E]">Edit the text above to fix any mistakes before generating your video.</p>
       </div>
-      <div className="flex items-center gap-3 pb-4">
-        <button onClick={() => setIsPlaying(!isPlaying)}
-          className={`w-12 h-12 rounded-full border-2 flex items-center justify-center flex-shrink-0 transition-colors ${isPlaying?'bg-[#C1622F] border-[#C1622F]':'bg-[#F5F1E8] border-[#D4CFC0]'}`}>
-          <Volume2 size={20} color={isPlaying?'white':'#888'} />
-        </button>
-        <button onClick={() => { setActiveTranscript(text); navigate('/stories/style'); }}
-          className="flex-1 py-4 rounded-2xl bg-[#C1622F] text-white font-bold text-sm tracking-wide flex items-center justify-center gap-2 hover:bg-[#A85426] transition-colors">
-          Next: Add Photos <ChevronRight size={16} />
-        </button>
-      </div>
+      <button onClick={() => { setActiveTranscript(text); navigate('/stories/style'); }}
+        className="w-full py-4 rounded-2xl bg-[#C1622F] text-white font-bold text-sm tracking-wide flex items-center justify-center gap-2 hover:bg-[#A85426] transition-colors mb-4">
+        Next: Add Photos <ChevronRight size={16} />
+      </button>
     </Screen>
   );
 }

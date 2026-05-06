@@ -89,9 +89,11 @@ export function DailyMissions() {
   return (
     <Screen withNav withSaathi className="pt-0">
       {/* Header */}
-      <div className="bg-gradient-to-br from-[#1A1A1A] to-[#2D2D2D] px-5 pt-10 pb-5">
-        <div className="flex items-center justify-between mb-3">
-          <button onClick={() => navigate('/games')}>
+      <div className="relative bg-gradient-to-br from-[#166534] via-[#15803D] to-[#4ADE80] px-5 pt-10 pb-5 overflow-hidden">
+        <div className="absolute bottom-0 right-4 opacity-20 text-5xl pointer-events-none">🌸</div>
+        <div className="absolute top-6 left-4 opacity-15 text-3xl pointer-events-none">🌿</div>
+        <div className="flex items-center justify-between mb-3 relative z-10">
+          <button onClick={() => navigate('/games')} className="p-2 -m-2">
             <ArrowLeft size={22} color="white" />
           </button>
           <StreakBadge streak={streak} />
@@ -100,12 +102,12 @@ export function DailyMissions() {
         <h2 className="text-[24px] font-bold text-white mt-0.5">Today's Challenges 🎯</h2>
 
         {/* XP bar */}
-        <div className="mt-3 bg-white/10 rounded-xl px-4 py-2.5 border border-white/10">
-          <div className="flex justify-between text-white/70 text-xs font-bold mb-1.5">
+        <div className="mt-3 bg-white/15 backdrop-blur-sm rounded-xl px-4 py-2.5 border border-white/20">
+          <div className="flex justify-between text-white/80 text-xs font-bold mb-1.5">
             <span className="flex items-center gap-1"><Zap size={10} /> XP Earned Today</span>
             <span>{totalXP}/{maxXP} XP</span>
           </div>
-          <Progress value={(totalXP / maxXP) * 100} className="h-2 bg-white/20" />
+          <Progress value={(totalXP / maxXP) * 100} className="h-2.5 bg-white/20" />
         </div>
       </div>
 
