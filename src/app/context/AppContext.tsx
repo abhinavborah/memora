@@ -48,7 +48,7 @@ const INITIAL_STORIES: Story[] = [
 ];
 
 export function AppProvider({ children }: { children: React.ReactNode }) {
-  const [userName, setUserName] = useState('Meena');
+  const [userName, setUserName] = useState('Rajesh');
   const [phoneNumber, setPhoneNumber] = useState('');
   const [gardenFlowers, setGardenFlowers] = useState(3);
   const [streak] = useState(5);

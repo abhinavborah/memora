@@ -75,8 +75,8 @@ export function Dashboard() {
           </div>
           <div className="flex flex-col items-end gap-2">
             <img
-              src="memora/grandma_pfp.png"
-              alt="Meena"
+              src="memora/grandpa_pfp.png"
+              alt="Rajesh"
               className="w-10 h-10 rounded-full object-cover border-2 border-white/40"
             />
             <StreakBadge streak={streak} />
