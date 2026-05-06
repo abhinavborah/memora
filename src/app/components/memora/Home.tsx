@@ -62,7 +62,7 @@ export function Dashboard() {
   return (
     <Screen withNav withSaathi className="pt-0">
       {/* Header */}
-      <div className="relative bg-gradient-to-br from-[#8B3A2A] via-[#C1622F] to-[#D97706] px-5 pt-12 pb-8 overflow-hidden">
+      <div className="relative bg-gradient-to-br from-[#8B3A2A] via-[#C1622F] to-[#D97706] px-5 pt-10 pb-8 overflow-hidden">
         {/* Background decorations */}
         <div className="absolute top-4 right-4 opacity-20 text-6xl">🌸</div>
         <div className="absolute bottom-2 left-6 opacity-15 text-4xl rotate-12">✨</div>

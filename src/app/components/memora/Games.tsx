@@ -16,7 +16,7 @@ export function Garden() {
   return (
     <Screen withNav withSaathi className="pt-0">
       {/* Header */}
-      <div className="relative bg-gradient-to-br from-[#166534] via-[#15803D] to-[#4ADE80] px-5 pt-10 pb-6 overflow-hidden">
+      <div className="relative bg-gradient-to-br from-[#166534] via-[#15803D] to-[#4ADE80] px-5 pt-10 pb-8 overflow-hidden">
         <div className="absolute bottom-0 right-4 opacity-20 text-5xl">🌸</div>
         <div className="absolute top-6 left-4 opacity-15 text-3xl">🌿</div>
         <div className="flex items-start justify-between mb-4">
