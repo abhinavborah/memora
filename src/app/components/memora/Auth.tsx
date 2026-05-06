@@ -182,12 +182,12 @@ export function OTPVerify() {
           onChange={setOtp}
         >
           <InputOTPGroup>
-            <InputOTPSlot index={0} className="w-12 h-14 rounded-2xl border-2 border-[#D4CFC0] text-2xl font-black text-[#1A1A1A] bg-white data-[active=true]:border-[#7B9EC8]" />
-            <InputOTPSlot index={1} className="w-12 h-14 rounded-2xl border-2 border-[#D4CFC0] text-2xl font-black text-[#1A1A1A] bg-white data-[active=true]:border-[#7B9EC8]" />
-            <InputOTPSlot index={2} className="w-12 h-14 rounded-2xl border-2 border-[#D4CFC0] text-2xl font-black text-[#1A1A1A] bg-white data-[active=true]:border-[#7B9EC8]" />
-            <InputOTPSlot index={3} className="w-12 h-14 rounded-2xl border-2 border-[#D4CFC0] text-2xl font-black text-[#1A1A1A] bg-white data-[active=true]:border-[#7B9EC8]" />
-            <InputOTPSlot index={4} className="w-12 h-14 rounded-2xl border-2 border-[#D4CFC0] text-2xl font-black text-[#1A1A1A] bg-white data-[active=true]:border-[#7B9EC8]" />
-            <InputOTPSlot index={5} className="w-12 h-14 rounded-2xl border-2 border-[#D4CFC0] text-2xl font-black text-[#1A1A1A] bg-white data-[active=true]:border-[#7B9EC8]" />
+            <InputOTPSlot index={0} className="w-12 h-14 rounded-2xl first:rounded-2xl last:rounded-2xl border-2 border-[#D4CFC0] text-2xl font-bold text-[#1A1A1A] bg-white data-[active=true]:border-[#7B9EC8]" />
+            <InputOTPSlot index={1} className="w-12 h-14 rounded-2xl first:rounded-2xl last:rounded-2xl border-2 border-[#D4CFC0] text-2xl font-bold text-[#1A1A1A] bg-white data-[active=true]:border-[#7B9EC8]" />
+            <InputOTPSlot index={2} className="w-12 h-14 rounded-2xl first:rounded-2xl last:rounded-2xl border-2 border-[#D4CFC0] text-2xl font-bold text-[#1A1A1A] bg-white data-[active=true]:border-[#7B9EC8]" />
+            <InputOTPSlot index={3} className="w-12 h-14 rounded-2xl first:rounded-2xl last:rounded-2xl border-2 border-[#D4CFC0] text-2xl font-bold text-[#1A1A1A] bg-white data-[active=true]:border-[#7B9EC8]" />
+            <InputOTPSlot index={4} className="w-12 h-14 rounded-2xl first:rounded-2xl last:rounded-2xl border-2 border-[#D4CFC0] text-2xl font-bold text-[#1A1A1A] bg-white data-[active=true]:border-[#7B9EC8]" />
+            <InputOTPSlot index={5} className="w-12 h-14 rounded-2xl first:rounded-2xl last:rounded-2xl border-2 border-[#D4CFC0] text-2xl font-bold text-[#1A1A1A] bg-white data-[active=true]:border-[#7B9EC8]" />
           </InputOTPGroup>
         </InputOTP>
       </div>
