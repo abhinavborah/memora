@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router';
-import { ArrowLeft, Plus, Settings, Bell, Shield, ChevronRight, Flame, Flower2, Sparkles, User, Check } from 'lucide-react';
+import { ArrowLeft, Plus, Settings, Bell, Shield, ChevronRight, Flame, Flower, Sparkles, User, Check } from 'lucide-react';
 import { Screen } from './Shared';
 import { useApp } from '../../context/AppContext';
 import { Card, CardContent } from '../ui/card';
@@ -29,7 +29,7 @@ export function ProfileScreen() {
     <Screen withNav withSaathi className="pt-0">
       {/* Profile header */}
       <div className="relative bg-gradient-to-br from-[#312E81] via-[#4F46E5] to-[#7C3AED] px-5 pt-12 pb-8 overflow-hidden">
-        <div className="absolute top-4 right-4 opacity-10"><Flower2 size={48} className="text-white" /></div>
+        <div className="absolute top-4 right-4 opacity-10"><Flower size={48} className="text-white" /></div>
         <div className="absolute bottom-2 left-4 opacity-10 rotate-12"><Sparkles size={32} className="text-white" /></div>
 
         <div className="flex flex-col items-center gap-3">
@@ -40,23 +40,23 @@ export function ProfileScreen() {
             style={{ width: 88, height: 88 }}
           />
           <div className="text-center">
-            <h2 className="text-2xl font-bold text-white">{userName} Sharma</h2>
+            <h2 className="text-2xl font-bold text-white">{userName}</h2>
             <p className="text-white/60 text-sm">Member since 2026</p>
           </div>
           <div className="flex gap-6 mt-1">
             <div className="text-center">
-              <p className="font-bold text-white text-lg">{stories.length}</p>
+              <p className="font-bold text-white text-lg leading-none">{stories.length}</p>
               <p className="text-white/60 text-xs">Stories</p>
             </div>
             <div className="text-center">
-              <p className="font-bold text-white text-lg flex items-center justify-center gap-1">
-                {streak} <Flame size={18} className="text-white" />
+              <p className="font-bold text-white text-lg flex items-center justify-center gap-1 leading-none">
+                {streak} <Flame size={18} className="text-white relative -top-px" />
               </p>
               <p className="text-white/60 text-xs">Streak</p>
             </div>
             <div className="text-center">
-              <p className="font-bold text-white text-lg flex items-center justify-center gap-1">
-                {gardenFlowers} <Flower2 size={18} className="text-white" />
+              <p className="font-bold text-white text-lg flex items-center justify-center gap-1 leading-none">
+                {gardenFlowers} <Flower size={18} className="text-white relative -top-px" />
               </p>
               <p className="text-white/60 text-xs">Flowers</p>
             </div>
