@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router';
 import { BookOpen, Puzzle, ChevronRight, Sparkles, Star } from 'lucide-react';
-import { Screen, MemoraLogo, StreakBadge } from './Shared';
+import { Screen, MemoraLogo } from './Shared';
 import { useApp } from '../../context/AppContext';
 import { motion } from 'motion/react';
 
@@ -73,13 +73,12 @@ export function Dashboard() {
             <p className="text-white/70 text-sm font-semibold">{greeting}</p>
             <h1 className="text-[28px] font-extrabold text-white leading-tight">{userName}!</h1>
           </div>
-          <div className="flex flex-col items-end gap-2">
+          <div className="flex flex-col items-end">
             <img
               src="memora/grandpa_pfp.png"
               alt="Rajesh"
-              className="w-10 h-10 rounded-full object-cover border-2 border-white/40"
+              className="w-14 h-14 rounded-full object-cover border-2 border-white/40"
             />
-            <StreakBadge streak={streak} />
           </div>
         </div>
 
