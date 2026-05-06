@@ -251,7 +251,7 @@ export function VoiceNoteMission() {
             </button>
             <button
               onClick={() => navigate('/games/voice-note/sent')}
-              className="flex-1 py-4 rounded-2xl bg-[#1A1A1A] border-2 border-[#1A1A1A] font-bold text-white tracking-wide text-sm hover:bg-[#C1622F] transition-colors"
+              className="flex-1 py-4 rounded-2xl bg-[#C1622F] border-2 border-[#C1622F] font-bold text-white tracking-wide text-sm hover:bg-[#A85426] hover:border-[#A85426] transition-colors"
             >
               Send
             </button>
@@ -359,7 +359,7 @@ export function VoiceNoteSent() {
         <button
           onClick={() => hasResponse ? navigate('/games/reward') : undefined}
           disabled={!hasResponse}
-          className={`w-full py-4 rounded-2xl border-2 font-bold tracking-wide text-sm transition-all ${hasResponse ? 'bg-[#1A1A1A] border-[#1A1A1A] text-white hover:bg-[#C1622F] hover:border-[#C1622F]' : 'border-[#D4CFC0] text-[#C8C3B4] bg-white cursor-not-allowed'}`}
+          className={`w-full py-4 rounded-2xl border-2 font-bold tracking-wide text-sm transition-all ${hasResponse ? 'bg-[#C1622F] border-[#C1622F] text-white hover:bg-[#A85426] hover:border-[#A85426]' : 'border-[#D4CFC0] text-[#C8C3B4] bg-white cursor-not-allowed'}`}
         >
           {hasResponse ? 'Collect Daily Reward' : 'Collect Daily Reward'}
         </button>
@@ -417,7 +417,7 @@ export function NewFlowerBloomed() {
         <button
           onClick={handleCollect}
           disabled={collected}
-          className={`w-full py-4 rounded-2xl border-2 font-bold tracking-wide text-sm transition-all shadow-md ${collected ? 'bg-[#10B981] border-[#10B981] text-white' : 'bg-[#1A1A1A] border-[#1A1A1A] text-white hover:bg-[#C1622F] hover:border-[#C1622F]'}`}
+          className={`w-full py-4 rounded-2xl border-2 font-bold tracking-wide text-sm transition-all shadow-md ${collected ? 'bg-[#10B981] border-[#10B981] text-white' : 'bg-[#C1622F] border-[#C1622F] text-white hover:bg-[#A85426] hover:border-[#A85426]'}`}
         >
           {collected ? 'Reward Collected! Going back…' : "Collect Today's Reward"}
         </button>

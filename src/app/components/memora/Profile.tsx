@@ -230,7 +230,7 @@ export function ContactsScreen() {
           onClick={() => navigate('/profile')}
           className={`w-full py-4 rounded-2xl font-bold tracking-wide text-sm border-2 transition-all shadow-md ${
             selected.length > 0
-              ? 'bg-[#1A1A1A] border-[#1A1A1A] text-white hover:bg-[#C1622F] hover:border-[#C1622F]'
+              ? 'bg-[#C1622F] border-[#C1622F] text-white hover:bg-[#A85426] hover:border-[#A85426]'
               : 'bg-white border-[#D4CFC0] text-[#888]'
           }`}
         >

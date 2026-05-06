@@ -570,7 +570,7 @@ export function TranscriptionReview() {
           <Volume2 size={20} color={isPlaying?'white':'#888'} />
         </button>
         <button onClick={() => { setActiveTranscript(text); navigate('/stories/style'); }}
-          className="flex-1 py-4 rounded-2xl bg-[#1A1A1A] text-white font-bold text-sm tracking-wide flex items-center justify-center gap-2 hover:bg-[#C1622F] transition-colors">
+          className="flex-1 py-4 rounded-2xl bg-[#C1622F] text-white font-bold text-sm tracking-wide flex items-center justify-center gap-2 hover:bg-[#A85426] transition-colors">
           Next: Add Photos <ChevronRight size={16} />
         </button>
       </div>
@@ -675,7 +675,7 @@ export function ArtStyleSelect() {
 
       <button onClick={() => { if (selectedArtStyle) navigate('/stories/preview'); }}
         disabled={!selectedArtStyle}
-        className={`w-full py-4 rounded-2xl font-bold text-base tracking-wide transition-all flex items-center justify-center gap-2 ${selectedArtStyle?'bg-[#1A1A1A] text-white hover:bg-[#C1622F] active:scale-[0.98]':'bg-[#D4CFC0] text-[#888] cursor-not-allowed'}`}>
+        className={`w-full py-4 rounded-2xl font-bold text-base tracking-wide transition-all flex items-center justify-center gap-2 ${selectedArtStyle?'bg-[#C1622F] text-white hover:bg-[#A85426] active:scale-[0.98]':'bg-[#D4CFC0] text-[#888] cursor-not-allowed'}`}>
         <Sparkles size={18} /> Generate My Video
       </button>
     </Screen>
@@ -773,7 +773,7 @@ export function VideoPreview() {
           <p className="font-bold text-[#1A1A1A] text-xl">Generation failed</p>
           <p className="text-[#888] text-sm">Your browser may not support video encoding.</p>
           <button onClick={() => navigate('/stories/style')}
-            className="px-8 py-3 rounded-2xl bg-[#1A1A1A] text-white font-bold">
+            className="px-8 py-3 rounded-2xl bg-[#C1622F] text-white font-bold hover:bg-[#A85426] transition-colors">
             Try Again
           </button>
         </div>
@@ -992,7 +992,7 @@ function VideoPlayer({ videoUrl, photos, artStyle, transcript, onShare, onRegene
       {/* ── Timeline ── */}
       <div className="bg-white rounded-xl border border-[#D4CFC0] px-3 py-2.5 flex items-center gap-3 mb-1 shadow-sm">
         <button onClick={togglePlay}
-          className="w-8 h-8 rounded-lg bg-[#1A1A1A] flex items-center justify-center flex-shrink-0">
+          className="w-8 h-8 rounded-lg bg-[#C1622F] flex items-center justify-center flex-shrink-0 hover:bg-[#A85426] transition-colors">
           {playing ? <Pause size={14} color="white" /> : <Play size={14} color="white" className="ml-0.5" />}
         </button>
         <div className="flex-1 cursor-pointer" onClick={seek}>
@@ -1018,7 +1018,7 @@ function VideoPlayer({ videoUrl, photos, artStyle, transcript, onShare, onRegene
             <Download size={14} /> Download
           </a>
           <button onClick={onShare}
-            className="flex-1 py-3.5 rounded-2xl bg-[#1A1A1A] border-2 border-[#1A1A1A] font-bold text-white text-sm flex items-center justify-center gap-2 hover:bg-[#C1622F] hover:border-[#C1622F] transition-colors">
+            className="flex-1 py-3.5 rounded-2xl bg-[#C1622F] border-2 border-[#C1622F] font-bold text-white text-sm flex items-center justify-center gap-2 hover:bg-[#A85426] hover:border-[#A85426] transition-colors">
             <Share2 size={15} /> Save & Share
           </button>
         </div>
@@ -1107,7 +1107,7 @@ function StoryShare({ videoUrl, onBack }: { videoUrl: string | null; onBack: () 
       </a>
 
       <button onClick={() => navigate('/home/menu')}
-        className="w-full py-4 rounded-2xl bg-[#1A1A1A] text-white font-bold tracking-wide text-sm hover:bg-[#C1622F] transition-colors">
+        className="w-full py-4 rounded-2xl bg-[#C1622F] text-white font-bold tracking-wide text-sm hover:bg-[#A85426] transition-colors">
         Back to Home
       </button>
     </Screen>
