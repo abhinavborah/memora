@@ -1,6 +1,6 @@
 # Memora Project Context
 
-> Last updated: 2026-05-03
+> Last updated: 2026-05-06
 > This file captures the full project context, architecture decisions, and refactoring history so future sessions can pick up without re-exploration.
 
 ---
@@ -12,7 +12,7 @@
 - **App Title**: Memora
 - **Tagline**: "Your Voice, Their Treasure"
 - **Package Name**: `memora` (was `@figma/my-make-file`)
-- **Tech Stack**: React 19 + Vite 6 + Tailwind CSS 4 + Framer Motion + shadcn/ui
+- **Tech Stack**: React 18 + Vite 6 + Tailwind CSS 4 + Motion (ex-Framer Motion) + shadcn/ui
 - **Target**: Mobile-first elderly/child-friendly UX (fills full mobile viewport width)
 
 ---
@@ -35,31 +35,37 @@ src/
 │   │   │   ├── tabs.tsx
 │   │   │   ├── separator.tsx
 │   │   │   ├── textarea.tsx
-│   │   │   └── input-otp.tsx
-│   │   └── memora/          # Application-specific components
-│   │       ├── Shared.tsx    # Shared UI primitives (wraps shadcn)
-│   │       ├── Auth.tsx      # Auth flows (splash, phone, OTP, name)
-│   │       ├── Home.tsx      # Home dashboard
-│   │       ├── Profile.tsx   # User profile & settings
-│   │       ├── Stories.tsx   # Story creation & library
-│   │       ├── Games.tsx     # Garden, missions, rewards
-│   │       ├── Onboarding.tsx # First-time onboarding
-│   │       └── Saathi.tsx    # AI companion chat
+│   │   │   ├── input-otp.tsx
+│   │   │   └── ... (45+ total, see section 5)
+│   │   ├── memora/          # Application-specific components
+│   │   │   ├── Shared.tsx    # Shared UI primitives (wraps shadcn)
+│   │   │   ├── Auth.tsx      # Auth flows (splash, phone, OTP, name)
+│   │   │   ├── Home.tsx      # Home dashboard
+│   │   │   ├── Profile.tsx   # User profile & settings
+│   │   │   ├── Stories.tsx   # Story creation & library (1,118 lines, canvas video gen)
+│   │   │   ├── Games.tsx     # Garden, missions, rewards
+│   │   │   ├── Onboarding.tsx # First-time onboarding
+│   │   │   └── Saathi.tsx    # AI companion chat
+│   │   └── figma/           # Figma-related utilities
+│   │       └── ImageWithFallback.tsx
 │   ├── context/
 │   │   └── AppContext.tsx    # Global state (phone, user, progress, etc.)
-│   ├── App.tsx               # Router setup
+│   ├── routes.tsx            # Router configuration (HashRouter)
+│   ├── App.tsx               # App shell with RouterProvider
 │   └── main.tsx              # Entry point
+├── styles/
+│   ├── index.css             # Global styles + Tailwind directives
+│   ├── theme.css             # CSS custom properties (colors)
+│   ├── fonts.css             # Typography system variables
+│   └── tailwind.css          # Tailwind configuration
 ├── index.html                # HTML entry (title: "Memora")
-├── index.css                 # Global styles + Tailwind directives
-├── theme.css                 # CSS custom properties (colors)
-└── fonts.css                 # Typography system variables
 ```
 
 ---
 
 ## 3. Color System (Custom Properties)
 
-Located in `theme.css` and `index.css`:
+Located in `src/styles/theme.css` and `src/styles/index.css`:
 
 | Token | Value | Usage |
 |-------|-------|-------|
@@ -87,7 +93,7 @@ Located in `theme.css` and `index.css`:
 | **Font family** | System default via Tailwind | NEVER add inline `font-family` styles |
 | **Line height** | `leading-relaxed` (1.625) | For body text readability |
 
-### Typography Scale (from `fonts.css`)
+### Typography Scale (from `src/styles/fonts.css`)
 
 ```css
 --font-xs: 0.75rem;     /* 12px - captions */
@@ -107,7 +113,7 @@ Located in `theme.css` and `index.css`:
 
 All shadcn components are in `src/app/components/ui/` and use the standard `cn()` utility with `cva` variants.
 
-### Already Installed & Used
+### Core Components (Already Installed & Used)
 - `button` - PrimaryBtn/SecondaryBtn wrappers in Shared.tsx
 - `card` - Card wrapper in Shared.tsx, Profile.tsx lists
 - `input` - Auth phone/name, Profile search, Saathi chat
@@ -120,6 +126,9 @@ All shadcn components are in `src/app/components/ui/` and use the standard `cn()
 - `separator` - List dividers in Profile
 - `textarea` - Transcription review in Stories
 - `input-otp` - OTP entry in Auth
+
+### Additional Installed Components
+`accordion`, `alert`, `alert-dialog`, `aspect-ratio`, `breadcrumb`, `calendar`, `carousel`, `chart`, `collapsible`, `command`, `context-menu`, `dialog`, `drawer`, `dropdown-menu`, `form`, `hover-card`, `label`, `menubar`, `navigation-menu`, `pagination`, `popover`, `radio-group`, `resizable`, `scroll-area`, `select`, `sheet`, `sidebar`, `skeleton`, `slider`, `sonner`, `table`, `toggle`, `toggle-group`, `tooltip`, `use-mobile`
 
 ### Adding New shadcn Components
 ```bash
@@ -153,6 +162,7 @@ These wrap shadcn components to maintain consistent styling:
 <ProgressBar value={50} max={100} label="Label" />
 <SaathiAvatar size={48} />
 <MemoraMicButton onClick={() => {}} />
+<RecordingButton />
 ```
 
 ---
@@ -177,11 +187,11 @@ These wrap shadcn components to maintain consistent styling:
 - ✅ Added `antialiased`, `leading-relaxed`, focus styles, `prefers-reduced-motion`
 
 ### Phase 3: Cleanup (COMPLETED)
-- ✅ Removed unused `@mui/material`, `@emotion/*`, `@popperjs/core`, `react-popper`
 - ✅ Updated app title to "Memora"
 - ✅ Updated package.json name to "memora"
 - ✅ Added logo files to `/public/memora/`
 - ✅ Build passes cleanly
+- ⚠️ `react-popper` still present in dependencies
 
 ### Phase 4: UI Polish (COMPLETED)
 - ✅ Added profile pictures (`grandma_pfp.png`, `grandpa_pfp.png`, `grandson_pfp.png`, `granddaughter_pfp.png`) to `/public/memora/`
@@ -191,6 +201,18 @@ These wrap shadcn components to maintain consistent styling:
 - ✅ Draggable Saathi FAB with 2D corner snapping (`saathiCorner` state: 4 corners)
 - ✅ Removed back button from Stories landing page (`ShareWisdom`)
 - ✅ Removed `max-w-[390px]` constraints so app fills full mobile viewport width
+
+### Phase 5: Feature Expansion (COMPLETED)
+- ✅ Full story creation flow with canvas-based video generation (Stories.tsx)
+- ✅ Art style selection (Anime, Pixar 3D, Sketch, Oil Paint)
+- ✅ Transcription review and editing
+- ✅ Photo upload support
+- ✅ Social sharing (WhatsApp, Instagram, Messages, Email via react-icons)
+- ✅ Games & missions flow with reward screens
+- ✅ Voice note mission with sent confirmation
+- ✅ Flower blooming reward animation
+- ✅ Onboarding flow with 3 screens (Stories, Games, Saathi)
+- ✅ Contacts screen in Profile
 
 ---
 
@@ -211,35 +233,89 @@ These wrap shadcn components to maintain consistent styling:
 - `/public/memora/grandson_pfp.png` — Raj (Grandson)
 - `/public/memora/granddaughter_pfp.png` — Available asset
 
+### Garden & Demo Assets
+- `/public/memora/flower3.jpg` — Garden flower asset
+- `/public/memora/flower4.jpg` — Garden flower asset
+- `/public/memora/memora_video_gen_demo.mov` — Video generation demo (7.4MB)
+
 ---
 
 ## 9. State Management
 
 Uses React Context (`AppContext`) with the following state:
-- `phoneNumber` - User's phone
-- `userName` - Display name
-- `selectedMissions` - Daily mission selections
-- `familyMembers` - Connected family
-- `stories` - User's stories
-- `completedMissions` - Mission progress
-- `showOnboarding` - First-time flag
-- `saathiCorner` - Saathi FAB position (`'top-left' | 'top-right' | 'bottom-left' | 'bottom-right'`)
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `phoneNumber` | `string` | User's phone |
+| `userName` | `string` | Display name (default: "Meena") |
+| `gardenFlowers` | `number` | Number of flowers in garden (default: 3) |
+| `streak` | `number` | Current streak count (default: 5, read-only) |
+| `completedMissions` | `string[]` | Completed mission IDs |
+| `stories` | `Story[]` | User's stories (3 sample stories seeded) |
+| `readAloud` | `boolean` | Read-aloud toggle state |
+| `activeTranscript` | `string` | Current story transcription being edited |
+| `uploadedPhotos` | `string[]` | Photos uploaded for current story |
+| `selectedArtStyle` | `string` | Selected art style for video generation |
+| `saathiCorner` | `'top-left' \| 'top-right' \| 'bottom-left' \| 'bottom-right'` | Saathi FAB position |
+| `hasSeenWelcome` | `boolean` | Whether user has seen welcome screen |
+| `logout` | `() => void` | Reset all state to defaults |
+
+### Story Interface
+```ts
+interface Story {
+  id: string;
+  title: string;
+  emoji: string;
+  daysAgo: number;
+  transcript: string;
+  artStyle?: string;
+  photos?: string[];
+  videoReady?: boolean;
+}
+```
 
 ---
 
 ## 10. Routing
 
-Defined in `App.tsx`:
-- `/` - Splash screen
-- `/phone` - Phone entry
-- `/otp` - OTP verification
-- `/name` - Name entry
-- `/home` - Home dashboard
-- `/stories` - Stories (create + library)
-- `/games` - Games & missions
-- `/profile` - Profile & settings
-- `/onboarding` - First-time onboarding
-- `/saathi` - AI companion
+Defined in `src/app/routes.tsx` using `createHashRouter`:
+
+### Auth Flow
+- `/` — Splash screen
+- `/phone` — Phone entry
+- `/otp` — OTP verification
+- `/setup` — Name entry (was `/name`)
+
+### Onboarding
+- `/onboarding/stories` — How Stories Work
+- `/onboarding/games` — How Games Work
+- `/onboarding/saathi` — Meet Saathi
+
+### Home
+- `/home` — Welcome Home
+- `/home/menu` — Dashboard
+
+### Stories Flow
+- `/stories` — Stories landing (ShareWisdom)
+- `/recording` — Recording active (alias)
+- `/stories/recording` — Recording active
+- `/stories/review` — Transcription review
+- `/stories/style` — Art style selection
+- `/stories/preview` — Video preview
+
+### Games Flow
+- `/games` — Garden
+- `/games/missions` — Daily missions
+- `/games/voice-note` — Voice note mission
+- `/games/voice-note/sent` — Voice note sent confirmation
+- `/games/reward` — New flower bloomed reward
+
+### Profile
+- `/profile` — Profile & settings
+- `/profile/contacts` — Contacts screen
+
+### Saathi
+- `/saathi` — AI companion chat
 
 ---
 
@@ -261,6 +337,8 @@ Defined in `App.tsx`:
 - [ ] No unit tests currently
 - [ ] No error boundaries
 - [ ] No offline/PWA support yet
+- [ ] `react-popper` still in dependencies but may be unused (check before removing)
+- [ ] Canvas-based video generation is client-side only (no server rendering)
 
 ---
 
@@ -286,13 +364,21 @@ npx shadcn add <component>
 
 | Package | Version | Purpose |
 |---------|---------|---------|
-| react | ^19.0.0 | UI framework |
-| react-router | ^7.0.0 | Routing |
-| framer-motion | ^12.0.0 | Animations |
-| tailwindcss | ^4.0.0 | Styling |
-| lucide-react | ^0.400.0 | Icons |
-| class-variance-authority | latest | shadcn variants |
+| react | ^18.3.1 | UI framework |
+| react-dom | ^18.3.1 | React DOM |
+| react-router | ^7.13.0 | Routing |
+| motion | ^12.23.24 | Animations (formerly Framer Motion) |
+| tailwindcss | ^4.1.12 | Styling |
+| lucide-react | ^0.487.0 | Icons |
+| react-icons | ^5.6.0 | Social media icons (FaWhatsapp, FaInstagram, etc.) |
+| canvas-confetti | ^1.9.4 | Celebration animations |
+| react-dnd | ^16.0.1 | Drag and drop |
+| recharts | ^2.15.2 | Charts |
+| sonner | ^2.0.3 | Toast notifications |
+| class-variance-authority | ^0.7.1 | shadcn variants |
 | clsx / tailwind-merge | latest | Class merging |
+| vite | ^6.3.5 | Build tool |
+| @tailwindcss/vite | ^4.1.12 | Tailwind Vite integration |
 
 ---
 

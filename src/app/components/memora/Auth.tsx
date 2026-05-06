@@ -6,6 +6,13 @@ import { useApp } from '../../context/AppContext';
 import { Input } from '../ui/input';
 import { InputOTP, InputOTPGroup, InputOTPSlot } from '../ui/input-otp';
 import { Switch } from '../ui/switch';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '../ui/select';
 
 // ─── Splash Screen ────────────────────────────────────────────────────────────
 export function SplashScreen() {
@@ -59,16 +66,29 @@ export function SplashScreen() {
   );
 }
 
+const COUNTRIES = [
+  { code: 'IN', flag: '🇮🇳', dial: '+91' },
+  { code: 'US', flag: '🇺🇸', dial: '+1' },
+  { code: 'GB', flag: '🇬🇧', dial: '+44' },
+  { code: 'CA', flag: '🇨🇦', dial: '+1' },
+  { code: 'AU', flag: '🇦🇺', dial: '+61' },
+  { code: 'AE', flag: '🇦🇪', dial: '+971' },
+  { code: 'SG', flag: '🇸🇬', dial: '+65' },
+];
+
 // ─── Phone Entry Screen ───────────────────────────────────────────────────────
 export function PhoneEntry() {
   const navigate = useNavigate();
   const { setPhoneNumber } = useApp();
   const [phone, setPhone] = useState('');
+  const [countryCode, setCountryCode] = useState('+91');
 
   const handleContinue = () => {
-    setPhoneNumber(phone);
+    setPhoneNumber(countryCode + phone);
     navigate('/otp');
   };
+
+  const selectedCountry = COUNTRIES.find((c) => c.dial === countryCode) || COUNTRIES[0];
 
   return (
     <Screen className="px-6 py-10">
@@ -83,15 +103,37 @@ export function PhoneEntry() {
       <div className="flex flex-col gap-3 mb-4">
         <p className="text-center tracking-widest text-xs font-bold text-[#1A1A1A]">PHONE NUMBER</p>
         <div className="flex gap-2">
-          <div className="px-4 py-4 rounded-2xl bg-white border-2 border-[#D4CFC0] font-bold text-[#1A1A1A] text-center">
-            +91
-          </div>
+          <Select value={countryCode} onValueChange={setCountryCode}>
+            <SelectTrigger
+              className="px-3 rounded-2xl bg-white border-2 border-[#D4CFC0] font-bold text-[#1A1A1A] text-center focus:border-[#7B9EC8] focus:ring-0 !h-16 w-auto min-w-[5.5rem] flex items-center justify-center gap-1"
+            >
+              <SelectValue>
+                <span className="text-base">{selectedCountry.flag}</span>
+                <span className="text-sm">{selectedCountry.dial}</span>
+              </SelectValue>
+            </SelectTrigger>
+            <SelectContent className="rounded-2xl border-2 border-[#D4CFC0] bg-white">
+              {COUNTRIES.map((c) => (
+                <SelectItem
+                  key={c.code}
+                  value={c.dial}
+                  className="text-[#1A1A1A] focus:bg-[#EDE8DC] cursor-pointer [&>*:last-child]:w-full"
+                >
+                  <span className="flex items-center w-full">
+                    <span className="text-[#888] text-xs w-8">{c.code}</span>
+                    <span className="mr-2">{c.flag}</span>
+                    <span className="font-semibold">{c.dial}</span>
+                  </span>
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
           <Input
             type="tel"
             value={phone}
             onChange={(e) => setPhone(e.target.value)}
             placeholder="98XXX XXXXX"
-            className="flex-1 px-4 py-6 rounded-2xl border-2 border-[#D4CFC0] text-[#1A1A1A] text-center text-lg font-semibold placeholder:text-[#C8C3B4] focus:border-[#7B9EC8] focus-visible:ring-0 h-auto"
+            className="flex-1 px-4 rounded-2xl border-2 border-[#D4CFC0] text-[#1A1A1A] text-center text-lg font-semibold placeholder:text-[#C8C3B4] focus:border-[#7B9EC8] focus-visible:ring-0 h-16"
           />
         </div>
         <PrimaryBtn onClick={handleContinue}>CONTINUE</PrimaryBtn>
