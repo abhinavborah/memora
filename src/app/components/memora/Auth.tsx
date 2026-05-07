@@ -234,15 +234,26 @@ export function NameSetup() {
           className="w-full px-5 py-6 rounded-2xl border-2 border-[#D4CFC0] text-[#1A1A1A] text-lg font-semibold placeholder:text-[#C8C3B4] focus:border-[#7B9EC8] focus-visible:ring-0 h-auto"
         />
 
-        <div className="flex items-center gap-3">
+        <button
+          onClick={() => setReadAloud(!readAloud)}
+          className="w-full flex items-center justify-between gap-4 p-5 rounded-2xl border-2 border-[#D4CFC0] bg-white active:bg-[#F5F1E8] transition-colors text-left"
+        >
+          <div className="flex items-center gap-4">
+            <div className="w-12 h-12 rounded-full bg-[#F5F1E8] flex items-center justify-center flex-shrink-0">
+              <Volume2 size={24} color="#1A1A1A" />
+            </div>
+            <div>
+              <p className="text-lg font-semibold text-[#1A1A1A] leading-tight">Read screens aloud</p>
+              <p className="text-sm text-[#888] mt-0.5">Voice reads everything on screen</p>
+            </div>
+          </div>
           <Switch
             checked={readAloud}
             onCheckedChange={setReadAloud}
-            className="data-[state=checked]:bg-[#1A1A1A] data-[state=unchecked]:bg-[#C8C3B4]"
+            className="data-[state=checked]:bg-[#1A1A1A] data-[state=unchecked]:bg-[#C8C3B4] flex-shrink-0"
+            onClick={(e) => e.stopPropagation()}
           />
-          <Volume2 size={20} color="#1A1A1A" />
-          <span className="text-base font-semibold text-[#1A1A1A]">Read screens aloud to me</span>
-        </div>
+        </button>
       </div>
 
       <div className="mt-auto flex flex-col gap-3 pt-8">

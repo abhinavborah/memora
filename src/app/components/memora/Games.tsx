@@ -197,9 +197,11 @@ export function VoiceNoteMission() {
         </div>
 
         <div className="text-center">
-          <div className="w-16 h-16 rounded-full bg-white/20 border-2 border-white/40 flex items-center justify-center text-3xl mx-auto mb-3">
-            🧒
-          </div>
+          <img
+            src="memora/granddaughter_pfp.png"
+            alt="Priya"
+            className="w-16 h-16 rounded-full object-cover border-2 border-white/40 mx-auto mb-3"
+          />
           <h2 className="text-xl font-bold text-white">Ask Priya</h2>
           <p className="text-white/70 text-sm mt-0.5">About her school picnic</p>
           {recording && (
@@ -346,7 +348,7 @@ export function VoiceNoteSent() {
               </button>
               <Waveform playing />
             </div>
-            <p className="text-sm text-[#1A1A1A] mt-2">"Yes Daadi, the school picnic was so much fun! 🎒"</p>
+            <p className="text-sm text-[#1A1A1A] mt-2">"Yes Daadu, the school picnic was so much fun! 🎒"</p>
           </motion.div>
         )}
       </AnimatePresence>
