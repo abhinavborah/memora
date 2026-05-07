@@ -38,6 +38,16 @@ export function ProfileScreen() {
       'App Settings',
       'Accessibility & more',
       'Log Out',
+      'Member since 2026',
+      'Stories',
+      'Streak',
+      'Flowers',
+      'Granddaughter',
+      'Wife',
+      'Grandson',
+      'Active now',
+      'Last seen yesterday',
+      'Active today',
     ]);
   }, [preload]);
 
@@ -64,24 +74,24 @@ export function ProfileScreen() {
           />
           <div className="text-center">
             <h2 className="text-2xl font-bold text-white">{userName}</h2>
-            <p className="text-white/60 text-sm">Member since 2026</p>
+            <p className="text-white/60 text-sm">{t('Member since 2026')}</p>
           </div>
           <div className="flex gap-6 mt-1">
             <div className="text-center">
               <p className="font-bold text-white text-lg leading-none">{stories.length}</p>
-              <p className="text-white/60 text-xs">Stories</p>
+              <p className="text-white/60 text-xs">{t('Stories')}</p>
             </div>
             <div className="text-center">
               <p className="font-bold text-white text-lg flex items-center justify-center gap-1 leading-none">
                 {streak} <Flame size={18} className="text-white relative -top-px" />
               </p>
-              <p className="text-white/60 text-xs">Streak</p>
+              <p className="text-white/60 text-xs">{t('Streak')}</p>
             </div>
             <div className="text-center">
               <p className="font-bold text-white text-lg flex items-center justify-center gap-1 leading-none">
                 {gardenFlowers} <Flower size={18} className="text-white relative -top-px" />
               </p>
-              <p className="text-white/60 text-xs">Flowers</p>
+              <p className="text-white/60 text-xs">{t('Flowers')}</p>
             </div>
           </div>
         </div>
@@ -110,7 +120,7 @@ export function ProfileScreen() {
                     <div className="flex-1">
                       <p className="font-bold text-[#1A1A1A]">
                         {name}
-                        <span className="text-xs font-semibold text-[#888] ml-1.5">({relation})</span>
+                        <span className="text-xs font-semibold text-[#888] ml-1.5">({t(relation)})</span>
                       </p>
                       <p className="text-xs text-[#888] flex items-center gap-1">
                         <span
@@ -122,7 +132,7 @@ export function ProfileScreen() {
                               : 'bg-gray-300'
                           }`}
                         />
-                        {status}
+                        {t(status)}
                       </p>
                     </div>
 
@@ -186,6 +196,19 @@ export function ContactsScreen() {
   const navigate = useNavigate();
   const [search, setSearch] = useState('');
   const [selected, setSelected] = useState<string[]>([]);
+  const { t, preload } = useTranslation();
+
+  useEffect(() => {
+    preload([
+      'Add Family Members',
+      'Select people to connect with',
+      'Search contacts...',
+      'Add',
+      'Member',
+      'Members',
+      'Select Contacts',
+    ]);
+  }, [preload]);
 
   const filtered = CONTACTS.filter((c) => c.toLowerCase().includes(search.toLowerCase()));
 
@@ -201,8 +224,8 @@ export function ContactsScreen() {
         <button onClick={() => navigate('/profile')} className="mb-3">
           <ArrowLeft size={22} color="white" />
         </button>
-          <h2 className="text-2xl font-bold text-white">Add Family Members</h2>
-        <p className="text-white/60 text-sm mt-0.5">Select people to connect with</p>
+          <h2 className="text-2xl font-bold text-white">{t('Add Family Members')}</h2>
+        <p className="text-white/60 text-sm mt-0.5">{t('Select people to connect with')}</p>
       </div>
 
       <div className="flex-1 px-5 pt-4">
@@ -210,7 +233,7 @@ export function ContactsScreen() {
           type="text"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          placeholder="Search contacts..."
+          placeholder={t('Search contacts...')}
           className="w-full px-4 py-3 rounded-2xl border-2 border-[#D4CFC0] text-[#1A1A1A] mb-4 text-sm focus-visible:ring-0 focus:border-[#7B9EC8] h-auto"
         />
 
@@ -260,10 +283,10 @@ export function ContactsScreen() {
           {selected.length > 0
             ? (
               <span className="flex items-center justify-center gap-1.5">
-                <Check size={16} /> Add {selected.length} Member{selected.length > 1 ? 's' : ''}
+                <Check size={16} /> {t('Add')} {selected.length} {selected.length > 1 ? t('Members') : t('Member')}
               </span>
             )
-            : 'Select Contacts'}
+            : t('Select Contacts')}
         </button>
       </div>
     </Screen>

@@ -3,6 +3,7 @@ import { motion, animate, useMotionValue } from 'framer-motion';
 import { useNavigate, useLocation } from 'react-router';
 import { Home, BookOpen, Gamepad2, User, Flame, Mic } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
+import { useTranslation } from '../../hooks/useTranslation';
 import { Button } from '../ui/button';
 import { Card as ShadcnCard } from '../ui/card';
 import { Badge } from '../ui/badge';
@@ -85,10 +86,11 @@ export function StepItem({ number, title, description }: { number: number; title
 
 // ─── Streak Badge ─────────────────────────────────────────────────────────────
 export function StreakBadge({ streak }: { streak: number }) {
+  const { t } = useTranslation();
   return (
     <Badge className="bg-[#F4C430] text-[#1A1A1A] font-bold text-xs px-2 py-0.5 rounded-full hover:bg-[#F4C430]">
       <Flame size={14} className="mr-1" />
-      {streak} day streak
+      {streak} {t('day streak')}
     </Badge>
   );
 }
@@ -338,12 +340,13 @@ export function FlowerGarden({ count }: { count: number }) {
 export function BottomNav() {
   const navigate = useNavigate();
   const location = useLocation();
+  const { t } = useTranslation();
 
   const tabs = [
-    { icon: Home, label: 'Home', path: '/home/menu' },
-    { icon: BookOpen, label: 'Stories', path: '/stories' },
-    { icon: Gamepad2, label: 'Games', path: '/games' },
-    { icon: User, label: 'Profile', path: '/profile' },
+    { icon: Home, label: t('Home'), path: '/home/menu' },
+    { icon: BookOpen, label: t('Stories'), path: '/stories' },
+    { icon: Gamepad2, label: t('Games'), path: '/games' },
+    { icon: User, label: t('Profile'), path: '/profile' },
   ];
 
   const active = (path: string) => {
@@ -355,14 +358,14 @@ export function BottomNav() {
 
   return (
     <nav className="fixed bottom-0 w-full bg-white border-t border-[#D4CFC0] flex justify-around py-3 pb-6 z-50 rounded-t-2xl shadow-[0_-4px_20px_rgba(0,0,0,0.05)]">
-      {tabs.map((t) => (
+      {tabs.map((tab) => (
         <button
-          key={t.label}
-          onClick={() => navigate(t.path)}
-          className={`flex flex-col items-center gap-1 transition-colors ${active(t.path) ? 'text-[#C1622F]' : 'text-[#888]'}`}
+          key={tab.label}
+          onClick={() => navigate(tab.path)}
+          className={`flex flex-col items-center gap-1 transition-colors ${active(tab.path) ? 'text-[#C1622F]' : 'text-[#888]'}`}
         >
-          <t.icon size={22} strokeWidth={active(t.path) ? 2.5 : 2} />
-          <span className="text-xs font-bold">{t.label}</span>
+          <tab.icon size={22} strokeWidth={active(tab.path) ? 2.5 : 2} />
+          <span className="text-xs font-bold">{tab.label}</span>
         </button>
       ))}
     </nav>

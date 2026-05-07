@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router';
 import { ArrowLeft, Check, ChevronRight, Zap, Mic } from 'lucide-react';
 import { Screen, FlowerGarden, StreakBadge, RecordingButton, Waveform, PrimaryBtn, SecondaryBtn } from './Shared';
 import { useApp } from '../../context/AppContext';
+import { useTranslation } from '../../hooks/useTranslation';
 import { motion, AnimatePresence } from 'motion/react';
 import { Progress } from '../ui/progress';
 
@@ -10,6 +11,7 @@ import { Progress } from '../ui/progress';
 export function Garden() {
   const navigate = useNavigate();
   const { gardenFlowers, streak, completedMissions } = useApp();
+  const { t } = useTranslation();
   const totalMissions = 3;
   const doneMissions = completedMissions.length;
 
@@ -21,8 +23,8 @@ export function Garden() {
         <div className="absolute top-6 left-4 opacity-15 text-3xl">🌿</div>
         <div className="flex items-start justify-between mb-4">
           <div>
-            <p className="text-white/70 text-xs font-semibold tracking-wide">YOUR GARDEN</p>
-            <h2 className="text-[26px] font-bold text-white leading-tight">Grow Together 🌱</h2>
+            <p className="text-white/70 text-xs font-semibold tracking-wide">{t('Your Garden')}</p>
+            <h2 className="text-[26px] font-bold text-white leading-tight">{t('Grow Together 🌱')}</h2>
           </div>
           <StreakBadge streak={streak} />
         </div>
@@ -30,8 +32,8 @@ export function Garden() {
         {/* Progress bar */}
         <div className="bg-white/15 backdrop-blur-sm rounded-2xl px-4 py-3 border border-white/20">
           <div className="flex justify-between text-white/80 text-xs font-bold mb-2">
-            <span>Today's Progress</span>
-            <span>{doneMissions}/{totalMissions} missions</span>
+            <span>{t("Today's Progress")}</span>
+            <span>{doneMissions}/{totalMissions} {t('missions')}</span>
           </div>
           <Progress value={(doneMissions / totalMissions) * 100} className="h-2.5 bg-white/20" />
         </div>
@@ -43,11 +45,11 @@ export function Garden() {
         <div className="mt-5 flex flex-col gap-3">
           <motion.div whileTap={{ scale: 0.97 }}>
             <PrimaryBtn onClick={() => navigate('/games/missions')}>
-              Today's Missions →
+              {t("Today's Missions →")}
             </PrimaryBtn>
           </motion.div>
           <SecondaryBtn onClick={() => navigate('/games/missions')}>
-            View All Rewards
+            {t('View All Rewards')}
           </SecondaryBtn>
         </div>
 
@@ -55,8 +57,8 @@ export function Garden() {
         <div className="mt-4 bg-gradient-to-r from-[#FEF9EC] to-[#FFFBEB] rounded-2xl border border-[#F5D88A] p-4 flex items-start gap-3">
           <span className="text-2xl">🌼</span>
           <div>
-            <p className="font-bold text-[#92400E] text-sm">Did you know?</p>
-            <p className="text-xs text-[#888] mt-0.5">Each flower represents a shared moment with your family. Your garden has {gardenFlowers} beautiful memories!</p>
+            <p className="font-bold text-[#92400E] text-sm">{t('Did you know?')}</p>
+            <p className="text-xs text-[#888] mt-0.5">{t('Each flower represents a shared moment with your family. Your garden has')} {gardenFlowers} {t('beautiful memories!')}</p>
           </div>
         </div>
       </div>
@@ -74,6 +76,7 @@ const MISSIONS = [
 export function DailyMissions() {
   const navigate = useNavigate();
   const { gardenFlowers, streak, completedMissions, setCompletedMissions } = useApp();
+  const { t } = useTranslation();
 
   const toggle = (label: string) => {
     setCompletedMissions(
@@ -98,14 +101,14 @@ export function DailyMissions() {
           </button>
           <StreakBadge streak={streak} />
         </div>
-        <p className="text-white/60 text-xs font-semibold tracking-wide">DAILY MISSIONS</p>
-        <h2 className="text-[24px] font-bold text-white mt-0.5">Today's Challenges 🎯</h2>
+        <p className="text-white/60 text-xs font-semibold tracking-wide">{t('Daily Missions')}</p>
+        <h2 className="text-[24px] font-bold text-white mt-0.5">{t("Today's Challenges 🎯")}</h2>
 
         {/* XP bar */}
         <div className="mt-3 bg-white/15 backdrop-blur-sm rounded-xl px-4 py-2.5 border border-white/20">
           <div className="flex justify-between text-white/80 text-xs font-bold mb-1.5">
-            <span className="flex items-center gap-1"><Zap size={10} /> XP Earned Today</span>
-            <span>{totalXP}/{maxXP} XP</span>
+            <span className="flex items-center gap-1"><Zap size={10} /> {t('XP Earned Today')}</span>
+            <span>{totalXP}/{maxXP} {t('XP')}</span>
           </div>
           <Progress value={(totalXP / maxXP) * 100} className="h-2.5 bg-white/20" />
         </div>
@@ -115,7 +118,7 @@ export function DailyMissions() {
         <FlowerGarden count={gardenFlowers} />
 
         <div className="mt-5 mb-3">
-          <p className="text-xs font-bold tracking-wide text-[#1A1A1A]">MISSIONS</p>
+          <p className="text-xs font-bold tracking-wide text-[#1A1A1A]">{t('Missions')}</p>
         </div>
 
         <div className="flex flex-col gap-3 mb-5">
@@ -132,10 +135,10 @@ export function DailyMissions() {
                   {isVoice ? <Mic size={20} color="#7B9EC8" /> : <Zap size={20} color="#F59E0B" />}
                 </div>
                 <div className="flex-1">
-                  <span className={`font-bold text-sm ${done ? 'line-through text-[#888]' : 'text-[#1A1A1A]'}`}>{label}</span>
+                  <span className={`font-bold text-sm ${done ? 'line-through text-[#888]' : 'text-[#1A1A1A]'}`}>{t(label)}</span>
                   <div className="flex items-center gap-2 mt-1">
-                    <span className="text-xs font-bold text-[#F59E0B] bg-[#FEF3C7] px-1.5 py-0.5 rounded-full">+{xp} XP</span>
-                    {isVoice && !done && <span className="text-xs font-semibold text-[#7B9EC8]">VOICE NOTE</span>}
+                    <span className="text-xs font-bold text-[#F59E0B] bg-[#FEF3C7] px-1.5 py-0.5 rounded-full">+{xp} {t('XP')}</span>
+                    {isVoice && !done && <span className="text-xs font-semibold text-[#7B9EC8]">{t('Voice Note')}</span>}
                   </div>
                 </div>
                 <div className={`w-7 h-7 rounded-lg border-2 flex items-center justify-center flex-shrink-0 transition-all ${done ? 'bg-[#10B981] border-[#10B981]' : 'border-[#D4CFC0]'}`}>
@@ -155,6 +158,7 @@ export function DailyMissions() {
 export function VoiceNoteMission() {
   const navigate = useNavigate();
   const { streak } = useApp();
+  const { t } = useTranslation();
   const [recording, setRecording] = useState(false);
   const [done, setDone] = useState(false);
   const [transcript, setTranscript] = useState('');
@@ -202,12 +206,12 @@ export function VoiceNoteMission() {
             alt="Priya"
             className="w-16 h-16 rounded-full object-cover border-2 border-white/40 mx-auto mb-3"
           />
-          <h2 className="text-xl font-bold text-white">Ask Priya</h2>
-          <p className="text-white/70 text-sm mt-0.5">About her school picnic</p>
+          <h2 className="text-xl font-bold text-white">{t('Ask Priya')}</h2>
+          <p className="text-white/70 text-sm mt-0.5">{t('About her school picnic')}</p>
           {recording && (
             <div className="flex items-center justify-center gap-2 mt-2">
               <div className="w-2 h-2 rounded-full bg-[#DC2626] animate-pulse" />
-              <span className="text-white/80 text-sm font-bold">Recording {formatTime(elapsed)}</span>
+              <span className="text-white/80 text-sm font-bold">{t('Recording')} {formatTime(elapsed)}</span>
             </div>
           )}
         </div>
@@ -215,14 +219,14 @@ export function VoiceNoteMission() {
 
       <div className="flex-1 px-5 pt-5">
         <div className="flex flex-col items-center gap-3 mb-5">
-          {!recording && !done && <p className="text-xs tracking-wide font-semibold text-[#888]">TAP TO RECORD</p>}
-          {recording && <p className="text-xs tracking-wide font-semibold text-red-500 animate-pulse">TAP TO STOP</p>}
+          {!recording && !done && <p className="text-xs tracking-wide font-semibold text-[#888]">{t('Tap to record')}</p>}
+          {recording && <p className="text-xs tracking-wide font-semibold text-red-500 animate-pulse">{t('Tap to stop')}</p>}
           <RecordingButton
             isRecording={recording}
             onPress={() => !done && setRecording(!recording)}
             size={90}
           />
-          {!recording && !done && <p className="text-xs text-[#888] text-center">Hold to record your voice note for Priya</p>}
+          {!recording && !done && <p className="text-xs text-[#888] text-center">{t('Hold to record your voice note for Priya')}</p>}
         </div>
 
         <AnimatePresence>
@@ -234,7 +238,7 @@ export function VoiceNoteMission() {
             >
               <div className="flex items-center gap-2 mb-2">
                 <div className={`w-2 h-2 rounded-full ${recording ? 'bg-[#DC2626] animate-pulse' : 'bg-[#10B981]'}`} />
-                <p className="text-xs font-semibold text-[#888]">{recording ? 'Recording…' : 'Recorded'}</p>
+                <p className="text-xs font-semibold text-[#888]">{recording ? t('Recording…') : t('Recorded')}</p>
               </div>
               <Waveform playing={recording} />
               <p className="text-center text-sm font-semibold text-[#1A1A1A] mt-2 min-h-[20px]">
@@ -251,13 +255,13 @@ export function VoiceNoteMission() {
               onClick={() => { setDone(false); setTranscript(''); }}
               className="flex-1 py-4 rounded-2xl border-2 border-[#D4CFC0] font-bold text-[#1A1A1A] bg-white tracking-wide text-sm hover:border-[#1A1A1A] transition-colors"
             >
-              Re-record
+              {t('Re-record')}
             </button>
             <button
               onClick={() => navigate('/games/voice-note/sent')}
               className="flex-1 py-4 rounded-2xl bg-[#C1622F] border-2 border-[#C1622F] font-bold text-white tracking-wide text-sm hover:bg-[#A85426] hover:border-[#A85426] transition-colors"
             >
-              Send
+              {t('Send')}
             </button>
           </div>
         ) : (
@@ -265,7 +269,7 @@ export function VoiceNoteMission() {
             onClick={() => navigate('/games/missions')}
             className="w-full py-4 rounded-2xl border-2 border-[#D4CFC0] font-bold text-[#888] bg-white flex items-center justify-center gap-2 hover:border-[#1A1A1A] transition-colors"
           >
-            <ArrowLeft size={18} /> Back to Missions
+            <ArrowLeft size={18} /> {t('Back to Missions')}
           </button>
         )}
       </div>
@@ -277,6 +281,7 @@ export function VoiceNoteMission() {
 export function VoiceNoteSent() {
   const navigate = useNavigate();
   const { streak } = useApp();
+  const { t } = useTranslation();
   const [hasResponse, setHasResponse] = useState(false);
 
   useEffect(() => {
@@ -299,7 +304,7 @@ export function VoiceNoteSent() {
           <Check size={36} color="white" strokeWidth={3} />
         </div>
         <h2 className="text-2xl font-bold text-[#1A1A1A]">
-          {hasResponse ? '🎉 Priya responded!' : 'Voice note sent!'}
+          {hasResponse ? t('🎉 Priya responded!') : t('Voice note sent!')}
         </h2>
         {!hasResponse && (
           <div className="flex items-center gap-2">
@@ -309,7 +314,7 @@ export function VoiceNoteSent() {
                   style={{ animation: `bounceDot 0.7s ${i * 0.15}s infinite alternate` }} />
               ))}
             </div>
-            <p className="text-sm text-[#888]">Waiting for Priya…</p>
+            <p className="text-sm text-[#888]">{t('Waiting for Priya…')}</p>
           </div>
         )}
         <style>{`@keyframes bounceDot { from { transform: translateY(0); } to { transform: translateY(-6px); } }`}</style>
@@ -319,7 +324,7 @@ export function VoiceNoteSent() {
       <div className="bg-white rounded-2xl border-2 border-[#D4CFC0] p-4 mb-3 shadow-sm">
         <div className="flex items-center gap-2 mb-2">
           <img src="memora/grandpa_pfp.png" alt="Rajesh" className="w-8 h-8 rounded-full object-cover" />
-          <p className="text-xs font-semibold text-[#888]">Your Note</p>
+          <p className="text-xs font-semibold text-[#888]">{t('Your Note')}</p>
         </div>
         <div className="flex items-center gap-2">
           <button className="w-8 h-8 rounded-full bg-[#F5F1E8] border border-[#D4CFC0] flex items-center justify-center flex-shrink-0">
@@ -340,7 +345,7 @@ export function VoiceNoteSent() {
           >
             <div className="flex items-center gap-2 mb-2 flex-row-reverse">
               <img src="memora/granddaughter_pfp.png" alt="Priya" className="w-8 h-8 rounded-full object-cover" />
-              <p className="text-xs font-semibold text-[#888]">Priya's Reply</p>
+              <p className="text-xs font-semibold text-[#888]">{t("Priya's Reply")}</p>
             </div>
             <div className="flex items-center gap-2 flex-row-reverse">
               <button className="w-8 h-8 rounded-full bg-[#DBEAFE] border border-[#BFDBFE] flex items-center justify-center flex-shrink-0">
@@ -358,14 +363,14 @@ export function VoiceNoteSent() {
           onClick={() => navigate('/games/missions')}
           className="w-full py-4 rounded-2xl border-2 border-[#D4CFC0] font-bold tracking-wide text-sm text-[#1A1A1A] bg-white hover:border-[#1A1A1A] transition-colors"
         >
-          Check Missions
+          {t('Check Missions')}
         </button>
         <button
           onClick={() => hasResponse ? navigate('/games/reward') : undefined}
           disabled={!hasResponse}
           className={`w-full py-4 rounded-2xl border-2 font-bold tracking-wide text-sm transition-all ${hasResponse ? 'bg-[#C1622F] border-[#C1622F] text-white hover:bg-[#A85426] hover:border-[#A85426]' : 'border-[#D4CFC0] text-[#C8C3B4] bg-white cursor-not-allowed'}`}
         >
-          {hasResponse ? 'Collect Daily Reward' : 'Collect Daily Reward'}
+          {t('Collect Daily Reward')}
         </button>
       </div>
     </Screen>
@@ -376,6 +381,7 @@ export function VoiceNoteSent() {
 export function NewFlowerBloomed() {
   const navigate = useNavigate();
   const { gardenFlowers, setGardenFlowers, streak, completedMissions, setCompletedMissions } = useApp();
+  const { t } = useTranslation();
   const [collected, setCollected] = useState(false);
 
   const handleCollect = () => {
@@ -397,8 +403,8 @@ export function NewFlowerBloomed() {
         className="text-center mb-5"
       >
         <div className="text-6xl mb-3 animate-bounce">🌸</div>
-        <h2 className="text-2xl font-bold text-[#1A1A1A]">A new flower bloomed!</h2>
-        <p className="text-[#888] mt-1">Your garden looks amazing</p>
+        <h2 className="text-2xl font-bold text-[#1A1A1A]">{t('A new flower bloomed!')}</h2>
+        <p className="text-[#888] mt-1">{t('Your garden looks amazing')}</p>
       </motion.div>
 
       <FlowerGarden count={gardenFlowers + 1} />
@@ -412,8 +418,8 @@ export function NewFlowerBloomed() {
       >
         <div className="w-12 h-12 rounded-xl bg-[#F59E0B] flex items-center justify-center text-2xl shadow-md">⭐</div>
         <div>
-          <p className="font-bold text-[#92400E]">+20 XP Earned!</p>
-          <p className="text-xs text-[#92400E]/70">You completed today's voice mission</p>
+          <p className="font-bold text-[#92400E]">{t('+20 XP Earned!')}</p>
+          <p className="text-xs text-[#92400E]/70">{t("You completed today's voice mission")}</p>
         </div>
       </motion.div>
 
@@ -423,13 +429,13 @@ export function NewFlowerBloomed() {
           disabled={collected}
           className={`w-full py-4 rounded-2xl border-2 font-bold tracking-wide text-sm transition-all shadow-md ${collected ? 'bg-[#10B981] border-[#10B981] text-white' : 'bg-[#C1622F] border-[#C1622F] text-white hover:bg-[#A85426] hover:border-[#A85426]'}`}
         >
-          {collected ? 'Reward Collected! Going back…' : "Collect Today's Reward"}
+          {collected ? t('Reward Collected! Going back…') : t("Collect Today's Reward")}
         </button>
         <button
           onClick={() => navigate('/games/missions')}
           className="w-full py-4 rounded-2xl border-2 border-[#D4CFC0] font-bold tracking-wide text-sm text-[#1A1A1A] bg-white hover:border-[#1A1A1A] transition-colors"
         >
-          Check Missions
+          {t('Check Missions')}
         </button>
       </div>
     </Screen>

@@ -1,8 +1,12 @@
 /** Translation service using Sarvam.ai API with localStorage caching */
 
 const API_BASE = 'https://api.sarvam.ai';
-const API_KEY = 'sk_s1772dy0_u9cizveKIJUQkoRma1fGA1KH';
+const API_KEY = import.meta.env.VITE_SARVAM_API_KEY || '';
 const CACHE_KEY_PREFIX = 'memora_translation_cache';
+
+if (!API_KEY) {
+  console.warn('[Memora] VITE_SARVAM_API_KEY is not set. Translation API calls will fail.');
+}
 
 export interface Language {
   code: string;

@@ -1,28 +1,47 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router';
 import { Screen, PrimaryBtn, SecondaryBtn, StepItem, SaathiAvatar, BottomNav } from './Shared';
+import { useTranslation } from '../../hooks/useTranslation';
 
 // ─── How Stories Work ─────────────────────────────────────────────────────────
 export function HowStoriesWork() {
   const navigate = useNavigate();
+  const { t, preload } = useTranslation();
+
+  useEffect(() => {
+    preload([
+      'How Stories Work',
+      'Preserve your memories in 4 simple steps',
+      'Record a Memory',
+      'Tap the mic and share a story, recipe, or life advice.',
+      'Add Photos',
+      'Choose pictures to bring your story to life.',
+      'Generate a Video',
+      'Pick an art style and we will create a beautiful video.',
+      'Share with Family',
+      'Send the video to your loved ones in one tap.',
+      'Start Recording',
+      'Skip for Now',
+    ]);
+  }, [preload]);
 
   return (
     <Screen withNav withSaathi className="px-5 pt-6">
       <div className="mb-6">
-        <h2 className="text-2xl font-bold text-[#1A1A1A]">How Stories Work</h2>
-        <p className="text-[#888] mt-1">Preserve your memories in 4 simple steps</p>
+        <h2 className="text-2xl font-bold text-[#1A1A1A]">{t('How Stories Work')}</h2>
+        <p className="text-[#888] mt-1">{t('Preserve your memories in 4 simple steps')}</p>
       </div>
 
       <div className="flex flex-col gap-5 mb-8">
-        <StepItem number={1} title="Record a Memory" description="Tap the mic and share a story, recipe, or life advice." />
-        <StepItem number={2} title="Add Photos" description="Choose pictures to bring your story to life." />
-        <StepItem number={3} title="Generate a Video" description="Pick an art style and we will create a beautiful video." />
-        <StepItem number={4} title="Share with Family" description="Send the video to your loved ones in one tap." />
+        <StepItem number={1} title={t('Record a Memory')} description={t('Tap the mic and share a story, recipe, or life advice.')} />
+        <StepItem number={2} title={t('Add Photos')} description={t('Choose pictures to bring your story to life.')} />
+        <StepItem number={3} title={t('Generate a Video')} description={t('Pick an art style and we will create a beautiful video.')} />
+        <StepItem number={4} title={t('Share with Family')} description={t('Send the video to your loved ones in one tap.')} />
       </div>
 
       <div className="flex flex-col gap-3 pb-4">
-        <SecondaryBtn onClick={() => navigate('/stories')}>START RECORDING</SecondaryBtn>
-        <PrimaryBtn onClick={() => navigate('/onboarding/games')}>SKIP FOR NOW</PrimaryBtn>
+        <SecondaryBtn onClick={() => navigate('/stories')}>{t('Start Recording')}</SecondaryBtn>
+        <PrimaryBtn onClick={() => navigate('/onboarding/games')}>{t('Skip for Now')}</PrimaryBtn>
       </div>
     </Screen>
   );
@@ -31,24 +50,42 @@ export function HowStoriesWork() {
 // ─── How Games Work ───────────────────────────────────────────────────────────
 export function HowGamesWork() {
   const navigate = useNavigate();
+  const { t, preload } = useTranslation();
+
+  useEffect(() => {
+    preload([
+      'How Games Work',
+      'Stay connected through fun daily missions',
+      'Complete Daily Missions',
+      'Check your garden for new tasks every day.',
+      'Send Voice Notes',
+      'Record and send messages to your family members.',
+      'Grow Your Garden',
+      'Finish missions to make your flowers bloom.',
+      'Collect Rewards',
+      'Keep your streak alive and unlock new flowers.',
+      'Start Playing',
+      'Skip for Now',
+    ]);
+  }, [preload]);
 
   return (
     <Screen withNav withSaathi className="px-5 pt-6">
       <div className="mb-6">
-        <h2 className="text-2xl font-bold text-[#1A1A1A]">How Games Work</h2>
-        <p className="text-[#888] mt-1">Stay connected through fun daily missions</p>
+        <h2 className="text-2xl font-bold text-[#1A1A1A]">{t('How Games Work')}</h2>
+        <p className="text-[#888] mt-1">{t('Stay connected through fun daily missions')}</p>
       </div>
 
       <div className="flex flex-col gap-5 mb-8">
-        <StepItem number={1} title="Complete Daily Missions" description="Check your garden for new tasks every day." />
-        <StepItem number={2} title="Send Voice Notes" description="Record and send messages to your family members." />
-        <StepItem number={3} title="Grow Your Garden" description="Finish missions to make your flowers bloom." />
-        <StepItem number={4} title="Collect Rewards" description="Keep your streak alive and unlock new flowers." />
+        <StepItem number={1} title={t('Complete Daily Missions')} description={t('Check your garden for new tasks every day.')} />
+        <StepItem number={2} title={t('Send Voice Notes')} description={t('Record and send messages to your family members.')} />
+        <StepItem number={3} title={t('Grow Your Garden')} description={t('Finish missions to make your flowers bloom.')} />
+        <StepItem number={4} title={t('Collect Rewards')} description={t('Keep your streak alive and unlock new flowers.')} />
       </div>
 
       <div className="flex flex-col gap-3 pb-4">
-        <SecondaryBtn onClick={() => navigate('/games')}>START PLAYING</SecondaryBtn>
-        <PrimaryBtn onClick={() => navigate('/onboarding/saathi')}>SKIP FOR NOW</PrimaryBtn>
+        <SecondaryBtn onClick={() => navigate('/games')}>{t('Start Playing')}</SecondaryBtn>
+        <PrimaryBtn onClick={() => navigate('/onboarding/saathi')}>{t('Skip for Now')}</PrimaryBtn>
       </div>
     </Screen>
   );
@@ -57,19 +94,37 @@ export function HowGamesWork() {
 // ─── Meet Saathi ──────────────────────────────────────────────────────────────
 export function MeetSaathi() {
   const navigate = useNavigate();
+  const { t, preload } = useTranslation();
   const [step, setStep] = useState(0);
+
+  useEffect(() => {
+    preload([
+      'Meet your friendly assistant!',
+      'Hello, I am Saathi!',
+      'I am your helpful AI assistant',
+      'You can find me on',
+      'the bottom right of the app',
+      'Got questions?',
+      'Need a hand?',
+      "Can't find something?",
+      'I am at your service!',
+      "Let's Begin",
+      'Next',
+      'Skip',
+    ]);
+  }, [preload]);
 
   const steps = [
     {
-      body: 'I am your helpful AI assistant',
+      body: t('I am your helpful AI assistant'),
       hasDashedBox: false,
     },
     {
-      body: 'You can find me on\nthe bottom right of the app',
+      body: t('You can find me on') + '\n' + t('the bottom right of the app'),
       hasDashedBox: true,
     },
     {
-      body: 'Got questions?\nNeed a hand?\nCan\'t find something?\n\nI am at your service!',
+      body: t('Got questions?') + '\n' + t('Need a hand?') + '\n' + t("Can't find something?") + '\n\n' + t('I am at your service!'),
       hasDashedBox: true,
       isLast: true,
     },
@@ -85,8 +140,8 @@ export function MeetSaathi() {
 
         <div className="flex flex-col items-center text-center gap-4 flex-1">
           <div>
-            <h2 className="text-xl font-bold text-[#1A1A1A]">Meet your friendly assistant!</h2>
-            <p className="text-lg font-bold text-[#1A1A1A]">Hello, I am Saathi!</p>
+            <h2 className="text-xl font-bold text-[#1A1A1A]">{t('Meet your friendly assistant!')}</h2>
+            <p className="text-lg font-bold text-[#1A1A1A]">{t('Hello, I am Saathi!')}</p>
           </div>
 
           {/* Animated Saathi avatar */}
@@ -121,11 +176,11 @@ export function MeetSaathi() {
 
         <div className="flex flex-col gap-3">
           {current.isLast ? (
-            <PrimaryBtn onClick={() => navigate('/home')}>LETS BEGIN</PrimaryBtn>
+            <PrimaryBtn onClick={() => navigate('/home')}>{t("Let's Begin")}</PrimaryBtn>
           ) : (
             <>
-              <SecondaryBtn onClick={() => setStep(step + 1)}>NEXT</SecondaryBtn>
-              <PrimaryBtn onClick={() => navigate('/home')}>SKIP</PrimaryBtn>
+              <SecondaryBtn onClick={() => setStep(step + 1)}>{t('Next')}</SecondaryBtn>
+              <PrimaryBtn onClick={() => navigate('/home')}>{t('Skip')}</PrimaryBtn>
             </>
           )}
         </div>

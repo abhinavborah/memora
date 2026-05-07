@@ -3,12 +3,18 @@ import { useNavigate } from 'react-router';
 import { BookOpen, Puzzle, ChevronRight, Sparkles, Star } from 'lucide-react';
 import { Screen, MemoraLogo } from './Shared';
 import { useApp } from '../../context/AppContext';
+import { useTranslation } from '../../hooks/useTranslation';
 import { motion } from 'motion/react';
 
 // ─── Welcome / Splash Home ────────────────────────────────────────────────────
 export function WelcomeHome() {
   const navigate = useNavigate();
   const { userName, hasSeenWelcome, setHasSeenWelcome } = useApp();
+  const { t, preload } = useTranslation();
+
+  useEffect(() => {
+    preload(['Welcome back']);
+  }, [preload]);
 
   useEffect(() => {
     if (hasSeenWelcome) {
@@ -16,8 +22,8 @@ export function WelcomeHome() {
       return;
     }
     setHasSeenWelcome(true);
-    const t = setTimeout(() => navigate('/home/menu'), 2000);
-    return () => clearTimeout(t);
+    const timer = setTimeout(() => navigate('/home/menu'), 2000);
+    return () => clearTimeout(timer);
   }, []);
 
   return (
@@ -30,7 +36,7 @@ export function WelcomeHome() {
           </div>
         </div>
         <div className="text-center">
-          <p className="text-sm font-bold tracking-wide text-[#888] mb-2">WELCOME BACK</p>
+          <p className="text-sm font-bold tracking-wide text-[#888] mb-2">{t('Welcome back')}</p>
           <h1 className="text-4xl font-bold text-[#8B3A2A]">
             {userName}! 🌸
           </h1>
@@ -55,9 +61,23 @@ export function WelcomeHome() {
 export function Dashboard() {
   const navigate = useNavigate();
   const { userName, streak, stories, gardenFlowers } = useApp();
+  const { t, preload } = useTranslation();
+
+  useEffect(() => {
+    preload([
+      'Good morning', 'Good afternoon', 'Good evening',
+      'Stories', 'Flowers', 'Day Streak',
+      'What would you like to do?',
+      'Share Stories', 'Record memories & wisdom', 'stories shared',
+      'Play Games', 'Daily missions with family', 'flowers in your garden',
+      "Today's Tip",
+      'Sharing just one memory a week can help younger generations feel 3x more connected to their roots',
+    ]);
+  }, [preload]);
 
   const hour = new Date().getHours();
-  const greeting = hour < 12 ? '🌅 Good morning' : hour < 17 ? '☀️ Good afternoon' : '🌙 Good evening';
+  const greetingKey = hour < 12 ? 'Good morning' : hour < 17 ? 'Good afternoon' : 'Good evening';
+  const greeting = `${hour < 12 ? '🌅' : hour < 17 ? '☀️' : '🌙'} ${t(greetingKey)}`;
 
   return (
     <Screen withNav withSaathi className="pt-0">
@@ -86,21 +106,21 @@ export function Dashboard() {
         <div className="flex gap-2 mt-4">
           <div className="flex-1 bg-white/15 backdrop-blur-sm rounded-xl px-3 py-2 border border-white/20 text-center">
             <p className="text-white font-extrabold text-lg">{stories.length}</p>
-            <p className="text-white/70 text-xs font-bold">Stories</p>
+            <p className="text-white/70 text-xs font-bold">{t('Stories')}</p>
           </div>
           <div className="flex-1 bg-white/15 backdrop-blur-sm rounded-xl px-3 py-2 border border-white/20 text-center">
             <p className="text-white font-extrabold text-lg">{gardenFlowers}</p>
-            <p className="text-white/70 text-xs font-bold">Flowers</p>
+            <p className="text-white/70 text-xs font-bold">{t('Flowers')}</p>
           </div>
           <div className="flex-1 bg-white/15 backdrop-blur-sm rounded-xl px-3 py-2 border border-white/20 text-center">
             <p className="text-white font-extrabold text-lg">{streak}</p>
-            <p className="text-white/70 text-xs font-bold">Day Streak</p>
+            <p className="text-white/70 text-xs font-bold">{t('Day Streak')}</p>
           </div>
         </div>
       </div>
 
       <div className="flex-1 px-5 pt-5 flex flex-col gap-4">
-        <h2 className="text-xl font-bold text-[#1A1A1A]">What would you like to do?</h2>
+        <h2 className="text-xl font-bold text-[#1A1A1A]">{t('What would you like to do?')}</h2>
 
         {/* Stories card */}
         <motion.button
@@ -115,12 +135,12 @@ export function Dashboard() {
             <BookOpen size={26} color="#92400E" />
           </div>
           <div className="flex-1 min-w-0">
-            <p className="font-bold text-[#1A1A1A] text-lg">Share Stories</p>
-            <p className="text-sm text-[#888] mt-0.5">Record memories & wisdom</p>
+            <p className="font-bold text-[#1A1A1A] text-lg">{t('Share Stories')}</p>
+            <p className="text-sm text-[#888] mt-0.5">{t('Record memories & wisdom')}</p>
             {stories.length > 0 && (
               <div className="flex items-center gap-1 mt-1.5">
                 <Star size={10} fill="#F59E0B" color="#F59E0B" />
-                <span className="text-xs text-[#888]">{stories.length} stories shared</span>
+                <span className="text-xs text-[#888]">{stories.length} {t('stories shared')}</span>
               </div>
             )}
           </div>
@@ -140,10 +160,10 @@ export function Dashboard() {
             <Puzzle size={26} color="white" />
           </div>
           <div className="flex-1 min-w-0">
-            <p className="font-bold text-[#1A1A1A] text-lg">Play Games</p>
-            <p className="text-sm text-[#888] mt-0.5">Daily missions with family</p>
+            <p className="font-bold text-[#1A1A1A] text-lg">{t('Play Games')}</p>
+            <p className="text-sm text-[#888] mt-0.5">{t('Daily missions with family')}</p>
             <div className="flex items-center gap-1 mt-1.5">
-              <span className="text-xs text-[#888]">{gardenFlowers} flowers in your garden</span>
+              <span className="text-xs text-[#888]">{gardenFlowers} {t('flowers in your garden')}</span>
             </div>
           </div>
           <ChevronRight size={20} color="#7B9EC8" className="group-hover:translate-x-1 transition-transform flex-shrink-0" />
@@ -160,8 +180,8 @@ export function Dashboard() {
             <Sparkles size={18} color="white" />
           </div>
           <div>
-            <p className="font-bold text-[#1A1A1A] text-sm">Today's Tip</p>
-            <p className="text-xs text-[#888] mt-0.5">Sharing just one memory a week can help younger generations feel 3x more connected to their roots 🌱</p>
+            <p className="font-bold text-[#1A1A1A] text-sm">{t("Today's Tip")}</p>
+            <p className="text-xs text-[#888] mt-0.5">{t('Sharing just one memory a week can help younger generations feel 3x more connected to their roots')} 🌱</p>
           </div>
         </motion.div>
       </div>

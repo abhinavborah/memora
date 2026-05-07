@@ -8,6 +8,7 @@ import {
 import { FaWhatsapp, FaInstagram, FaCommentDots, FaEnvelope } from 'react-icons/fa';
 import { Screen, RecordingButton } from './Shared';
 import { useApp } from '../../context/AppContext';
+import { useTranslation } from '../../hooks/useTranslation';
 import { motion, AnimatePresence } from 'motion/react';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '../ui/tabs';
 import { Textarea } from '../ui/textarea';
@@ -317,6 +318,7 @@ export function ShareWisdom() {
   const navigate = useNavigate();
   const { stories, setActiveTranscript } = useApp();
   const [activeTab, setActiveTab] = useState<'create' | 'library'>('create');
+  const { t } = useTranslation();
 
   return (
     <Screen withNav withSaathi className="pt-0">
@@ -327,15 +329,15 @@ export function ShareWisdom() {
               style={{ top: `${10 + i*14}%`, left: `${5 + i*16}%`, transform: `rotate(${i*30}deg)` }}>{e}</span>
           ))}
         </div>
-        <h2 className="text-[26px] font-bold text-white leading-tight mt-2">Share Your Wisdom</h2>
-        <p className="text-white/70 mt-1 text-sm">Life lessons for your family</p>
+        <h2 className="text-[26px] font-bold text-white leading-tight mt-2">{t('Share Your Wisdom')}</h2>
+        <p className="text-white/70 mt-1 text-sm">{t('Life lessons for your family')}</p>
         <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as 'create' | 'library')} className="mt-4">
           <TabsList className="w-full bg-white/10 backdrop-blur-sm rounded-2xl p-1 h-auto">
             <TabsTrigger value="create" className="flex-1 rounded-xl text-sm font-bold data-[state=active]:bg-white data-[state=active]:text-[#1A1A1A] data-[state=active]:shadow-lg text-white/80 py-2">
-              + Create New
+              {t('+ Create New')}
             </TabsTrigger>
             <TabsTrigger value="library" className="flex-1 rounded-xl text-sm font-bold data-[state=active]:bg-white data-[state=active]:text-[#1A1A1A] data-[state=active]:shadow-lg text-white/80 py-2">
-              My Stories
+              {t('My Stories')}
             </TabsTrigger>
           </TabsList>
         </Tabs>
@@ -346,23 +348,23 @@ export function ShareWisdom() {
           <TabsContent value="create" className="mt-0">
             <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.25 }}>
               <div className="flex flex-col items-center gap-4 py-6">
-                <p className="text-xs tracking-wide font-semibold text-[#888]">Tap the mic to start</p>
+                <p className="text-xs tracking-wide font-semibold text-[#888]">{t('Tap the mic to start')}</p>
                 <div className="relative">
                   <div className="absolute inset-0 rounded-full bg-[#C1622F]/20 animate-ping pointer-events-none" style={{ animationDuration: '2s' }} />
                   <RecordingButton isRecording={false} onPress={() => navigate('/recording')} size={100} />
                 </div>
-                <p className="tracking-wide font-bold text-[#1A1A1A] text-sm">Begin recording</p>
+                <p className="tracking-wide font-bold text-[#1A1A1A] text-sm">{t('Begin recording')}</p>
                 <button
                   onClick={() => { setActiveTranscript(''); navigate('/stories/review'); }}
                   className="flex items-center gap-2 text-sm font-semibold text-[#7B9EC8] hover:text-[#C1622F] transition-colors mt-1"
                 >
                   <Keyboard size={16} />
-                  Or type your story
+                  {t('Or type your story')}
                 </button>
               </div>
               <div className="my-5 flex items-center gap-3">
                 <div className="flex-1 h-px bg-[#D4CFC0]" />
-                <span className="text-xs font-semibold text-[#888] tracking-wide">OR CONTINUE</span>
+                <span className="text-xs font-semibold text-[#888] tracking-wide">{t('OR CONTINUE')}</span>
                 <div className="flex-1 h-px bg-[#D4CFC0]" />
               </div>
               {stories.length > 0 && (
@@ -373,10 +375,10 @@ export function ShareWisdom() {
                   </div>
                   <div className="text-left flex-1">
                     <p className="font-bold text-[#1A1A1A] text-base">{stories[0].title}</p>
-                    <p className="text-xs text-[#888] mt-0.5">Draft • {stories[0].daysAgo} days ago</p>
+                    <p className="text-xs text-[#888] mt-0.5">{t('Draft')} • {stories[0].daysAgo} {t('days ago')}</p>
                     <div className="flex items-center gap-1 mt-1">
                       <div className="w-2 h-2 rounded-full bg-[#F59E0B]" />
-                      <span className="text-xs text-[#888]">Tap to continue editing</span>
+                      <span className="text-xs text-[#888]">{t('Tap to continue editing')}</span>
                     </div>
                   </div>
                   <ChevronRight size={18} color="#C1622F" className="group-hover:translate-x-1 transition-transform" />
@@ -398,6 +400,7 @@ export function ShareWisdom() {
 // ─── Stories Library ───────────────────────────────────────────────────────────
 function StoriesLibrary({ stories }: { stories: any[] }) {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   return (
     <div className="flex flex-col gap-3 pb-6">
       {stories.map((story, i) => (
@@ -410,21 +413,21 @@ function StoriesLibrary({ stories }: { stories: any[] }) {
               alt={story.title} className="w-full h-full object-cover" />
             <div className="absolute inset-0 flex items-end p-1">
               <span className="bg-black/50 text-white text-xs px-1 py-0.5 rounded font-semibold backdrop-blur-sm">
-                {STYLE_LABEL[story.artStyle ?? 'anime'] ?? 'Anime'}
+                {STYLE_LABEL[story.artStyle ?? 'anime'] ?? t('Anime')}
               </span>
             </div>
           </div>
           <div className="flex-1 min-w-0">
             <p className="font-bold text-[#1A1A1A] text-base truncate">{story.title}</p>
-            <p className="text-xs text-[#888] mt-0.5">{story.daysAgo} days ago</p>
+            <p className="text-xs text-[#888] mt-0.5">{story.daysAgo} {t('days ago')}</p>
             <div className="flex items-center gap-1.5 mt-1.5">
               {story.videoReady ? (
                 <Badge variant="outline" className="flex items-center gap-1 text-xs font-semibold text-[#10B981] bg-[#D1FAE5] border-[#86EFAC] px-2 py-0.5 rounded-full">
-                  <Film size={9} /> Video Ready
+                  <Film size={9} /> {t('Video Ready')}
                 </Badge>
               ) : (
                 <Badge variant="outline" className="flex items-center gap-1 text-xs font-semibold text-[#F59E0B] bg-[#FEF3C7] border-[#FDE68A] px-2 py-0.5 rounded-full">
-                  <Clock size={9} /> Processing
+                  <Clock size={9} /> {t('Processing')}
                 </Badge>
               )}
             </div>
@@ -437,7 +440,7 @@ function StoriesLibrary({ stories }: { stories: any[] }) {
       ))}
       <button className="flex items-center justify-center gap-2 p-4 rounded-2xl border-2 border-dashed border-[#C8C3B4] text-[#888] hover:border-[#C1622F] hover:text-[#C1622F] transition-all">
         <Plus size={18} />
-        <span className="text-sm font-bold">Record a new story</span>
+        <span className="text-sm font-bold">{t('Record a new story')}</span>
       </button>
     </div>
   );
@@ -451,6 +454,7 @@ export function RecordingActive() {
   const [charIndex, setCharIndex]     = useState(0);
   const [elapsed, setElapsed]         = useState(0);
   const [bars, setBars]               = useState<number[]>(Array(32).fill(20));
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (charIndex < SAMPLE_TRANSCRIPT.length) {
@@ -486,13 +490,13 @@ export function RecordingActive() {
           <button onClick={() => navigate('/stories')}><ArrowLeft size={22} color="white" /></button>
           <div className="flex items-center gap-2 bg-[#DC2626]/20 border border-[#DC2626]/40 rounded-full px-3 py-1">
             <div className="w-2 h-2 rounded-full bg-[#DC2626] animate-pulse" />
-            <span className="text-white text-xs font-bold">REC {fmt(elapsed)}</span>
+            <span className="text-white text-xs font-bold">{t('REC')} {fmt(elapsed)}</span>
           </div>
           <div className="w-6" />
         </div>
         <div className="text-center mb-4">
-          <h2 className="text-[22px] font-bold text-white">Share Your Wisdom</h2>
-          <p className="text-white/50 text-sm mt-0.5">Life lessons for your family</p>
+          <h2 className="text-[22px] font-bold text-white">{t('Share Your Wisdom')}</h2>
+          <p className="text-white/50 text-sm mt-0.5">{t('Life lessons for your family')}</p>
         </div>
         <div className="flex items-center justify-center gap-[3px] h-16 px-2 mb-4">
           {bars.map((h, i) => (
@@ -501,14 +505,14 @@ export function RecordingActive() {
           ))}
         </div>
         <div className="flex flex-col items-center gap-3">
-          <p className="text-xs tracking-wide font-semibold text-white/60">TAP TO STOP RECORDING</p>
+          <p className="text-xs tracking-wide font-semibold text-white/60">{t('TAP TO STOP RECORDING')}</p>
           <RecordingButton isRecording={true} onPress={handleStop} size={90} />
         </div>
       </div>
       <div className="flex-1 px-5 pt-4">
         <div className="flex items-center gap-2 mb-2">
           <Mic size={14} color="#888" />
-          <p className="text-xs font-semibold text-[#888] tracking-wide">LIVE TRANSCRIPT</p>
+          <p className="text-xs font-semibold text-[#888] tracking-wide">{t('LIVE TRANSCRIPT')}</p>
         </div>
         <div className="bg-white rounded-2xl border-2 border-[#D4CFC0] p-4 min-h-[140px]">
           <p className="text-[#1A1A1A] leading-relaxed text-sm">
@@ -516,7 +520,7 @@ export function RecordingActive() {
             <span className="inline-block w-0.5 h-4 bg-[#C1622F] ml-0.5 animate-pulse align-middle" />
           </p>
         </div>
-        <p className="text-center text-xs text-[#888] mt-2">AI is transcribing in real time…</p>
+        <p className="text-center text-xs text-[#888] mt-2">{t('AI is transcribing in real time…')}</p>
       </div>
     </Screen>
   );
@@ -529,6 +533,7 @@ export function TranscriptionReview() {
   const [text, setText]           = useState(activeTranscript || SAMPLE_TRANSCRIPT);
   const [isPlaying, setIsPlaying] = useState(false);
   const [wordCount, setWordCount] = useState(0);
+  const { t } = useTranslation();
 
   useEffect(() => {
     setWordCount(text.trim().split(/\s+/).filter(Boolean).length);
@@ -539,8 +544,8 @@ export function TranscriptionReview() {
       <div className="flex items-center justify-between mb-5">
         <button onClick={() => navigate(-1)}><ArrowLeft size={24} color="#1A1A1A" /></button>
         <div className="text-center">
-          <p className="text-xs font-semibold text-[#888] tracking-wide">STEP 2 OF 4</p>
-          <p className="text-sm font-bold text-[#1A1A1A]">Review Transcript</p>
+          <p className="text-xs font-semibold text-[#888] tracking-wide">{t('STEP 2 OF 4')}</p>
+          <p className="text-sm font-bold text-[#1A1A1A]">{t('Review Transcript')}</p>
         </div>
         <div className="w-6" />
       </div>
@@ -548,34 +553,34 @@ export function TranscriptionReview() {
         {[1,2,3,4].map(n => <div key={n} className={`flex-1 h-1.5 rounded-full ${n<=2?'bg-[#C1622F]':'bg-[#D4CFC0]'}`} />)}
       </div>
       <div className="flex flex-col items-center gap-2 mb-4">
-        <p className="text-xs tracking-wide font-semibold text-[#888]">TAP TO RE-RECORD</p>
+        <p className="text-xs tracking-wide font-semibold text-[#888]">{t('TAP TO RE-RECORD')}</p>
                 <RecordingButton isRecording={false} onPress={() => navigate('/recording')} size={70} />
       </div>
       <div className="bg-white rounded-2xl border-2 border-[#D4CFC0] p-4 mb-3 flex-1">
         <div className="flex items-center justify-between mb-2">
           <div className="flex items-center gap-2">
-            <p className="text-xs font-semibold text-[#888] tracking-wide leading-none">TRANSCRIPTION</p>
+            <p className="text-xs font-semibold text-[#888] tracking-wide leading-none">{t('TRANSCRIPTION')}</p>
             <button
               onClick={() => setIsPlaying(!isPlaying)}
               className="inline-flex items-center gap-1 text-xs text-[#7B9EC8] hover:text-[#C1622F] transition-colors leading-none py-0"
             >
               {isPlaying ? <Pause size={12} className="relative -top-px" /> : <Play size={12} className="relative -top-px" />}
-              {isPlaying ? 'Stop' : 'Listen'}
+              {isPlaying ? t('Stop') : t('Listen')}
             </button>
           </div>
-          <span className="text-xs text-[#888]">{wordCount} words</span>
+          <span className="text-xs text-[#888]">{wordCount} {t('words')}</span>
         </div>
         <Textarea value={text} onChange={e => setText(e.target.value)}
           className="w-full h-44 text-sm text-[#1A1A1A] leading-relaxed bg-transparent border-0 shadow-none focus-visible:ring-0 resize-none p-0"
-          placeholder="Your transcript will appear here..." />
+          placeholder={t('Your transcript will appear here...')} />
       </div>
       <div className="bg-[#FEF9EC] border border-[#FCD34D] rounded-xl px-3 py-2 mb-4 flex items-start gap-2">
         <span className="text-base">💡</span>
-        <p className="text-xs text-[#92400E]">Edit the text above to fix any mistakes before generating your video.</p>
+        <p className="text-xs text-[#92400E]">{t('Edit the text above to fix any mistakes before generating your video.')}</p>
       </div>
       <button onClick={() => { setActiveTranscript(text); navigate('/stories/style'); }}
         className="w-full py-4 rounded-2xl bg-[#C1622F] text-white font-bold text-sm tracking-wide flex items-center justify-center gap-2 hover:bg-[#A85426] transition-colors mb-4">
-        Next: Add Photos <ChevronRight size={16} />
+        {t('Next: Add Photos')} <ChevronRight size={16} />
       </button>
     </Screen>
   );
@@ -586,6 +591,7 @@ export function ArtStyleSelect() {
   const navigate = useNavigate();
   const { uploadedPhotos, setUploadedPhotos, selectedArtStyle, setSelectedArtStyle } = useApp();
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const { t } = useTranslation();
 
   const handleFileChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files ?? []);
@@ -609,8 +615,8 @@ export function ArtStyleSelect() {
       <div className="flex items-center justify-between mb-5">
         <button onClick={() => navigate('/stories/review')}><ArrowLeft size={24} color="#1A1A1A" /></button>
         <div className="text-center">
-          <p className="text-xs font-semibold text-[#888] tracking-wide">STEP 3 OF 4</p>
-          <p className="text-sm font-bold text-[#1A1A1A]">Craft Your Story</p>
+          <p className="text-xs font-semibold text-[#888] tracking-wide">{t('STEP 3 OF 4')}</p>
+          <p className="text-sm font-bold text-[#1A1A1A]">{t('Craft Your Story')}</p>
         </div>
         <div className="w-6" />
       </div>
@@ -622,13 +628,13 @@ export function ArtStyleSelect() {
       {/* Photo Upload */}
       <div className="mb-5">
         <div className="flex items-center justify-between mb-2">
-          <p className="text-sm font-bold text-[#1A1A1A]">📸 Add Your Photos</p>
+          <p className="text-sm font-bold text-[#1A1A1A]">{t('📸 Add Your Photos')}</p>
           <p className="text-xs text-[#888]">{uploadedPhotos.length}/8</p>
         </div>
         <div className="flex gap-2 flex-wrap">
           {uploadedPhotos.map((src, i) => (
             <div key={i} className="relative w-[72px] h-[72px] rounded-xl overflow-hidden border-2 border-[#D4CFC0] flex-shrink-0">
-              <img src={src} alt={`Photo ${i+1}`} className="w-full h-full object-cover" />
+              <img src={src} alt={`${t('Photo')} ${i+1}`} className="w-full h-full object-cover" />
               <button onClick={() => removePhoto(i)}
                 className="absolute top-0.5 right-0.5 w-5 h-5 rounded-full bg-black/60 flex items-center justify-center">
                 <X size={10} color="white" />
@@ -639,20 +645,20 @@ export function ArtStyleSelect() {
             <button onClick={() => fileInputRef.current?.click()}
               className={`rounded-xl border-2 border-dashed border-[#C8C3B4] flex flex-col items-center justify-center gap-1 bg-white hover:border-[#C1622F] hover:bg-[#FFF5F1] transition-colors flex-shrink-0 ${uploadedPhotos.length === 0 ? 'w-[80%] h-32 mx-auto' : 'w-[72px] h-[72px]'}`}>
               <ImagePlus size={uploadedPhotos.length === 0 ? 32 : 20} color="#C8C3B4" />
-              <span className={`font-semibold text-[#C8C3B4] ${uploadedPhotos.length === 0 ? 'text-sm' : 'text-xs'}`}>Add</span>
+              <span className={`font-semibold text-[#C8C3B4] ${uploadedPhotos.length === 0 ? 'text-sm' : 'text-xs'}`}>{t('Add')}</span>
             </button>
           )}
         </div>
         {uploadedPhotos.length === 0 && (
           <p className="text-xs text-[#888] mt-2 italic text-center">
-            Photos optional — we'll generate beautiful AI art scenes if you skip ✨
+            {t("Photos optional — we'll generate beautiful AI art scenes if you skip")} ✨
           </p>
         )}
       </div>
 
       {/* Art Style */}
       <div className="bg-gradient-to-r from-[#FEF9EC] to-[#FFF5F1] rounded-2xl px-4 py-2.5 mb-3 border border-[#F5D88A]">
-        <p className="font-bold text-[#1A1A1A] text-sm tracking-wide text-center">🎨 Choose Video Art Style</p>
+        <p className="font-bold text-[#1A1A1A] text-sm tracking-wide text-center">{t('🎨 Choose Video Art Style')}</p>
       </div>
 
       <div className="grid grid-cols-2 gap-3 mb-5">
@@ -679,7 +685,7 @@ export function ArtStyleSelect() {
       <button onClick={() => { if (selectedArtStyle) navigate('/stories/preview'); }}
         disabled={!selectedArtStyle}
         className={`w-full py-4 rounded-2xl font-bold text-base tracking-wide transition-all flex items-center justify-center gap-2 ${selectedArtStyle?'bg-[#C1622F] text-white hover:bg-[#A85426] active:scale-[0.98]':'bg-[#D4CFC0] text-[#888] cursor-not-allowed'}`}>
-        <Sparkles size={18} /> Generate My Video
+        <Sparkles size={18} /> {t('Generate My Video')}
       </button>
     </Screen>
   );
@@ -698,6 +704,7 @@ const GEN_STEPS = [
 export function VideoPreview() {
   const navigate = useNavigate();
   const { uploadedPhotos, selectedArtStyle, setStories, stories, activeTranscript } = useApp();
+  const { t } = useTranslation();
 
   const [phase, setPhase]           = useState<'generating'|'ready'|'error'>('generating');
   const [currentStep, setCurrentStep] = useState(0);
@@ -773,11 +780,11 @@ export function VideoPreview() {
       <Screen className="items-center justify-center px-5">
         <div className="text-center flex flex-col items-center gap-4">
           <div className="text-5xl">😢</div>
-          <p className="font-bold text-[#1A1A1A] text-xl">Generation failed</p>
-          <p className="text-[#888] text-sm">Your browser may not support video encoding.</p>
+          <p className="font-bold text-[#1A1A1A] text-xl">{t('Generation failed')}</p>
+          <p className="text-[#888] text-sm">{t('Your browser may not support video encoding.')}</p>
           <button onClick={() => navigate('/stories/style')}
             className="px-8 py-3 rounded-2xl bg-[#C1622F] text-white font-bold hover:bg-[#A85426] transition-colors">
-            Try Again
+            {t('Try Again')}
           </button>
         </div>
       </Screen>
@@ -817,11 +824,11 @@ export function VideoPreview() {
           </div>
 
           <div className="text-center">
-            <h2 className="text-2xl font-bold text-[#1A1A1A]">Creating Your Video</h2>
+            <h2 className="text-2xl font-bold text-[#1A1A1A]">{t('Creating Your Video')}</h2>
             <p className="text-[#888] text-sm mt-1">
               {uploadedPhotos.length > 0
-                ? `Encoding ${uploadedPhotos.length} photo${uploadedPhotos.length>1?'s':''} into video…`
-                : 'Generating AI art scenes…'}
+                ? t(`Encoding ${uploadedPhotos.length} photo${uploadedPhotos.length>1?'s':''} into video…`)
+                : t('Generating AI art scenes…')}
             </p>
           </div>
 
@@ -840,7 +847,7 @@ export function VideoPreview() {
                     : 'bg-white border-[#D4CFC0]'}`}>
                   <span className="text-xl">{done ? '✅' : step.icon}</span>
                   <span className={`text-sm font-bold flex-1 ${active?'text-[#C1622F]':done?'text-[#16A34A]':'text-[#888]'}`}>
-                    {step.label}
+                    {t(step.label)}
                   </span>
                   {active && (
                     <motion.div
@@ -857,13 +864,13 @@ export function VideoPreview() {
           {/* Progress bar */}
           <div className="w-full">
             <div className="flex justify-between text-xs text-[#888] mb-1.5">
-              <span>Rendering progress</span>
+              <span>{t('Rendering progress')}</span>
               <span className="font-bold">{progress}%</span>
             </div>
             <Progress value={progress} className="h-3 bg-[#E8E4DA]" />
             {progress > 25 && (
               <p className="text-center text-xs text-[#888] mt-1.5">
-                {progress < 95 ? 'Drawing frames…' : 'Finalising encoding…'}
+                {progress < 95 ? t('Drawing frames…') : t('Finalising encoding…')}
               </p>
             )}
           </div>
@@ -911,6 +918,7 @@ function VideoPlayer({ videoUrl, photos, artStyle, transcript, onShare, onRegene
   const [duration, setDuration] = useState(0);
   const [muted, setMuted]       = useState(true);
   const [videoAspect, setVideoAspect] = useState<number | null>(null);
+  const { t } = useTranslation();
 
   const styleData = ART_STYLES.find(s => s.id === artStyle) ?? ART_STYLES[0];
 
@@ -944,7 +952,7 @@ function VideoPlayer({ videoUrl, photos, artStyle, transcript, onShare, onRegene
     <Screen withNav withSaathi className="px-5 pt-5">
       <div className="flex items-center justify-between mb-4">
         <button onClick={onBack}><ArrowLeft size={24} color="#1A1A1A" /></button>
-        <h2 className="text-xl font-bold text-[#1A1A1A]">Your Story is Ready! 🎉</h2>
+        <h2 className="text-xl font-bold text-[#1A1A1A]">{t('Your Story is Ready!')} 🎉</h2>
         <div className="w-6" />
       </div>
 
@@ -988,7 +996,7 @@ function VideoPlayer({ videoUrl, photos, artStyle, transcript, onShare, onRegene
           className="absolute top-2.5 right-2.5 bg-black/50 backdrop-blur-sm text-white text-xs px-2 py-1.5 rounded-full font-semibold border border-white/15 flex items-center gap-1 hover:bg-black/70 transition-colors"
         >
           {muted ? <VolumeX size={14} /> : <Volume2 size={14} />}
-          {muted ? 'Off' : 'On'}
+          {muted ? t('Off') : t('On')}
         </button>
       </div>
 
@@ -1007,22 +1015,22 @@ function VideoPlayer({ videoUrl, photos, artStyle, transcript, onShare, onRegene
       </div>
 
       <p className="text-center text-xs text-[#888] mb-4">
-        {`${styleData.label} style${photos.length > 0 ? ` • ${photos.length} photo${photos.length > 1 ? 's' : ''}` : ' • AI art scenes'}`}
+        {`${styleData.label} ${t('style')}${photos.length > 0 ? ` • ${photos.length} ${photos.length > 1 ? t('photos') : t('photo')}` : ` • ${t('AI art scenes')}`}`}
       </p>
 
       <div className="flex flex-col gap-3 pb-4">
         <button onClick={onRegenerate}
           className="w-full py-3.5 rounded-2xl border-2 border-[#D4CFC0] font-bold text-[#1A1A1A] bg-white text-sm flex items-center justify-center gap-2 hover:border-[#1A1A1A] transition-colors">
-          <RotateCcw size={15} /> Regenerate
+          <RotateCcw size={15} /> {t('Regenerate')}
         </button>
         <div className="flex gap-3">
           <a href={DEMO_VIDEO} download="memora-story.mov"
             className="flex-1 py-3.5 rounded-2xl border-2 border-[#7B9EC8] font-bold text-[#7B9EC8] bg-white text-sm flex items-center justify-center gap-2 hover:bg-[#7B9EC8] hover:text-white transition-colors">
-            <Download size={14} /> Download
+            <Download size={14} /> {t('Download')}
           </a>
           <button onClick={onShare}
             className="flex-1 py-3.5 rounded-2xl bg-[#C1622F] border-2 border-[#C1622F] font-bold text-white text-sm flex items-center justify-center gap-2 hover:bg-[#A85426] hover:border-[#A85426] transition-colors">
-            <Share2 size={15} /> Save & Share
+            <Share2 size={15} /> {t('Save & Share')}
           </button>
         </div>
       </div>
@@ -1037,6 +1045,7 @@ function StoryShare({ videoUrl, onBack }: { videoUrl: string | null; onBack: () 
   const [shared, setShared] = useState<string | null>(null);
   const [videoAspect, setVideoAspect] = useState<number | null>(null);
   const styleData = ART_STYLES.find(s => s.id === selectedArtStyle) ?? ART_STYLES[0];
+  const { t } = useTranslation();
 
   const apps = [
     { id: 'whatsapp',  icon: FaWhatsapp,  label: 'WhatsApp',  color: '#25D366', bg: '#DCFCE7' },
@@ -1049,7 +1058,7 @@ function StoryShare({ videoUrl, onBack }: { videoUrl: string | null; onBack: () 
     <Screen withNav withSaathi className="px-5 pt-5">
       <div className="flex items-center justify-between mb-5">
         <button onClick={onBack}><ArrowLeft size={24} color="#1A1A1A" /></button>
-        <h2 className="text-xl font-bold text-[#1A1A1A]">Share with Family</h2>
+        <h2 className="text-xl font-bold text-[#1A1A1A]">{t('Share with Family')}</h2>
         <div className="w-6" />
       </div>
 
@@ -1086,8 +1095,8 @@ function StoryShare({ videoUrl, onBack }: { videoUrl: string | null; onBack: () 
           <div className="w-14 h-14 rounded-full bg-[#10B981] flex items-center justify-center">
             <CheckCircle2 size={30} color="white" />
           </div>
-          <p className="font-bold text-[#1A1A1A] text-lg">Shared Successfully!</p>
-          <p className="text-sm text-[#888]">Your family will love this memory 💛</p>
+          <p className="font-bold text-[#1A1A1A] text-lg">{t('Shared Successfully!')}</p>
+          <p className="text-sm text-[#888]">{t('Your family will love this memory')} 💛</p>
         </motion.div>
       ) : (
         <div className="flex justify-around mb-5">
@@ -1106,12 +1115,12 @@ function StoryShare({ videoUrl, onBack }: { videoUrl: string | null; onBack: () 
 
       <a href={DEMO_VIDEO} download="memora-story.mov"
         className="w-full mb-3 py-3.5 rounded-2xl border-2 border-[#7B9EC8] font-bold text-[#7B9EC8] bg-white text-sm flex items-center justify-center gap-2 hover:bg-[#7B9EC8] hover:text-white transition-colors">
-        <Download size={16} /> Download Video File
+        <Download size={16} /> {t('Download Video File')}
       </a>
 
       <button onClick={() => navigate('/home/menu')}
         className="w-full py-4 rounded-2xl bg-[#C1622F] text-white font-bold tracking-wide text-sm hover:bg-[#A85426] transition-colors">
-        Back to Home
+        {t('Back to Home')}
       </button>
     </Screen>
   );
