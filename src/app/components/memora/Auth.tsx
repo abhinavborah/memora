@@ -18,6 +18,8 @@ import {
 export function SplashScreen() {
   const navigate = useNavigate();
   const [slide, setSlide] = useState(0);
+  const [touchStart, setTouchStart] = useState<number | null>(null);
+  const [touchEnd, setTouchEnd] = useState<number | null>(null);
 
   const slides = [
     {
@@ -34,16 +36,49 @@ export function SplashScreen() {
     },
   ];
 
+  const minSwipeDistance = 50;
+
+  const onTouchStart = (e: React.TouchEvent) => {
+    setTouchEnd(null);
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+
+  const onTouchMove = (e: React.TouchEvent) => {
+    setTouchEnd(e.targetTouches[0].clientX);
+  };
+
+  const onTouchEnd = () => {
+    if (!touchStart || !touchEnd) return;
+    const distance = touchStart - touchEnd;
+    const isLeftSwipe = distance > minSwipeDistance;
+    const isRightSwipe = distance < -minSwipeDistance;
+
+    if (isLeftSwipe && slide < slides.length - 1) {
+      setSlide(slide + 1);
+    }
+    if (isRightSwipe && slide > 0) {
+      setSlide(slide - 1);
+    }
+  };
+
   return (
     <Screen className="items-center justify-between px-6 py-12">
-      <div className="flex-1 flex flex-col items-center justify-center gap-8">
+      {/* Fixed logo + Memora — NOT swipeable */}
+      <div className="flex flex-col items-center gap-8 pt-8">
         <MemoraLogo size={90} />
-        <div className="text-center">
-          <h1 className="text-5xl font-extrabold text-[#1A1A1A] mb-3">
-            Memora
-          </h1>
+        <h1 className="text-5xl font-extrabold text-[#1A1A1A]">Memora</h1>
+      </div>
+
+      {/* Swipeable text — fixed height so layout doesn't shift */}
+      <div
+        className="flex-1 flex flex-col items-center justify-center w-full"
+        onTouchStart={onTouchStart}
+        onTouchMove={onTouchMove}
+        onTouchEnd={onTouchEnd}
+      >
+        <div className="text-center min-h-[80px] flex flex-col items-center justify-center">
           <p className="text-lg font-bold text-[#1A1A1A]">{slides[slide].title}</p>
-          <p className="text-sm text-[#888] mt-2">{slides[slide].sub}</p>
+          <p className="text-sm text-[#888] mt-2 max-w-[260px]">{slides[slide].sub}</p>
         </div>
       </div>
 
