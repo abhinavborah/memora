@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router';
 import { ArrowLeft, Send, Mic } from 'lucide-react';
 import { SaathiAvatar } from './Shared';
 import { Input } from '../ui/input';
+import { useTranslation } from '../../hooks/useTranslation';
 
 interface Message {
   id: string;
@@ -42,6 +43,7 @@ const SUGGESTIONS = [
 
 export function SaathiScreen() {
   const navigate = useNavigate();
+  const { t, preload } = useTranslation();
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
   const [typing, setTyping] = useState(false);
@@ -50,6 +52,28 @@ export function SaathiScreen() {
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages, typing]);
+
+  useEffect(() => {
+    preload([
+      "I'm here to help! You can ask me how to record a story, how the garden game works, or how to add family members.",
+      "To record a story, tap on 'Stories' in the bottom menu, then tap the big red microphone button. Speak clearly and tap again to stop!",
+      "To add photos to your video, after recording your story tap 'Generate →', then on the next screen tap 'ADD PHOTOS' to choose pictures from your gallery.",
+      "After recording your story and adding photos, you can pick an art style (Anime, Pixar, or Sketch) and tap 'Generate' to create your video!",
+      "Your garden grows when you complete daily missions! Each completed mission makes a new flower bloom. Keep your streak going to unlock more flowers 🌸",
+      "To add family members, go to Profile (the person icon at the bottom) and tap '+ ADD FAMILY MEMBER'. You can search your contacts and add them!",
+      "To share your video, tap 'Save and share' after generating your video, then choose WhatsApp, Email, Instagram, or X to send it to your loved ones!",
+      "Daily missions are fun tasks like sending a voice note to a family member. Complete them to grow flowers in your garden. New missions appear every day!",
+      'How do I record a story?',
+      'How can I add photos to the video?',
+      'How does the garden work?',
+      'How do I add family members?',
+      'Saathi',
+      'AI assistant • always here to help',
+      'Hello, how may I help you?',
+      'Ask me any question related to the app!',
+      'Ask Saathi anything...',
+    ]);
+  }, [preload]);
 
   const sendMessage = (text: string) => {
     if (!text.trim()) return;
@@ -80,8 +104,8 @@ export function SaathiScreen() {
           </button>
           <SaathiAvatar size={44} />
           <div>
-            <p className="font-bold text-[#1A1A1A] text-base">Saathi</p>
-            <p className="text-xs text-[#888]">AI assistant • always here to help</p>
+            <p className="font-bold text-[#1A1A1A] text-base">{t('Saathi')}</p>
+            <p className="text-xs text-[#888]">{t('AI assistant • always here to help')}</p>
           </div>
         </div>
 
@@ -91,8 +115,8 @@ export function SaathiScreen() {
           <div className="flex items-start gap-2">
             <SaathiAvatar size={32} />
             <div className="bg-white rounded-2xl rounded-tl-sm px-4 py-3 max-w-[80%] border border-[#D4CFC0]">
-              <p className="font-bold text-[#1A1A1A] text-sm">Hello, how may I help you?</p>
-              <p className="text-xs text-[#888] mt-0.5">Ask me any question related to the app!</p>
+              <p className="font-bold text-[#1A1A1A] text-sm">{t('Hello, how may I help you?')}</p>
+              <p className="text-xs text-[#888] mt-0.5">{t('Ask me any question related to the app!')}</p>
             </div>
           </div>
 
@@ -105,7 +129,7 @@ export function SaathiScreen() {
                   onClick={() => sendMessage(s)}
                   className="text-xs font-semibold px-3 py-2 rounded-xl bg-[#EEF4FA] border border-[#7B9EC8] text-[#7B9EC8] hover:bg-[#7B9EC8] hover:text-white transition-colors"
                 >
-                  {s}
+                  {t(s)}
                 </button>
               ))}
             </div>
@@ -121,7 +145,7 @@ export function SaathiScreen() {
                     : 'bg-white text-[#1A1A1A] border border-[#D4CFC0] rounded-bl-sm'
                 }`}
               >
-                {msg.text}
+                {t(msg.text)}
               </div>
             </div>
           ))}
@@ -148,7 +172,7 @@ export function SaathiScreen() {
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && sendMessage(input)}
-              placeholder="Ask Saathi anything..."
+              placeholder={t('Ask Saathi anything...')}
               className="flex-1 text-sm text-[#1A1A1A] placeholder:text-[#C8C3B4] bg-transparent border-0 shadow-none focus-visible:ring-0 h-auto px-0 py-0"
             />
             <button className="text-[#888] hover:text-[#C1622F] transition-colors">
