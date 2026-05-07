@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router';
 import { ArrowLeft, Volume2 } from 'lucide-react';
 import { MemoraLogo, Screen, PrimaryBtn, SecondaryBtn } from './Shared';
 import { useApp } from '../../context/AppContext';
+import { useTranslation } from '../../hooks/useTranslation';
 import { Input } from '../ui/input';
 import { InputOTP, InputOTPGroup, InputOTPSlot } from '../ui/input-otp';
 import { Switch } from '../ui/switch';
@@ -17,24 +18,29 @@ import {
 // ─── Splash Screen ────────────────────────────────────────────────────────────
 export function SplashScreen() {
   const navigate = useNavigate();
+  const { t, preload } = useTranslation();
   const [slide, setSlide] = useState(0);
   const [touchStart, setTouchStart] = useState<number | null>(null);
   const [touchEnd, setTouchEnd] = useState<number | null>(null);
 
   const slides = [
     {
-      title: 'Your Voice, Their Treasure',
-      sub: 'Preserve your memories. Connect with family.',
+      titleKey: 'Your Voice, Their Treasure',
+      subKey: 'Preserve your memories. Connect with family.',
     },
     {
-      title: 'Record & Share Stories',
-      sub: 'Turn your voice into beautiful AI-generated videos.',
+      titleKey: 'Record & Share Stories',
+      subKey: 'Turn your voice into beautiful AI-generated videos.',
     },
     {
-      title: 'Stay Connected Every Day',
-      sub: 'Fun missions and voice notes bring family closer.',
+      titleKey: 'Stay Connected Every Day',
+      subKey: 'Fun missions and voice notes bring family closer.',
     },
   ];
+
+  useEffect(() => {
+    preload(slides.flatMap((s) => [s.titleKey, s.subKey, 'Begin Your Journey', 'I Already Have an Account']));
+  }, [preload]);
 
   const minSwipeDistance = 50;
 
@@ -77,8 +83,8 @@ export function SplashScreen() {
         onTouchEnd={onTouchEnd}
       >
         <div className="text-center min-h-[80px] flex flex-col items-center justify-center">
-          <p className="text-lg font-bold text-[#1A1A1A]">{slides[slide].title}</p>
-          <p className="text-sm text-[#888] mt-2 max-w-[260px]">{slides[slide].sub}</p>
+          <p className="text-lg font-bold text-[#1A1A1A]">{t(slides[slide].titleKey)}</p>
+          <p className="text-sm text-[#888] mt-2 max-w-[260px]">{t(slides[slide].subKey)}</p>
         </div>
       </div>
 
@@ -94,8 +100,8 @@ export function SplashScreen() {
       </div>
 
       <div className="w-full flex flex-col gap-3">
-        <PrimaryBtn onClick={() => navigate('/phone')}>Begin Your Journey</PrimaryBtn>
-        <SecondaryBtn onClick={() => navigate('/phone')}>I Already Have an Account</SecondaryBtn>
+        <PrimaryBtn onClick={() => navigate('/language')}>{t('Begin Your Journey')}</PrimaryBtn>
+        <SecondaryBtn onClick={() => navigate('/language')}>{t('I Already Have an Account')}</SecondaryBtn>
       </div>
     </Screen>
   );
@@ -115,8 +121,21 @@ const COUNTRIES = [
 export function PhoneEntry() {
   const navigate = useNavigate();
   const { setPhoneNumber } = useApp();
+  const { t, preload } = useTranslation();
   const [phone, setPhone] = useState('');
   const [countryCode, setCountryCode] = useState('+91');
+
+  useEffect(() => {
+    preload([
+      'Connect with Family',
+      'Enter your number to get started',
+      'Phone Number',
+      'Continue',
+      "We'll send a code to verify.",
+      'No passwords to remember.',
+      'Need help? Call us',
+    ]);
+  }, [preload]);
 
   const handleContinue = () => {
     setPhoneNumber(countryCode + phone);
@@ -130,13 +149,13 @@ export function PhoneEntry() {
       <div className="flex flex-col items-center gap-6 mb-10">
         <MemoraLogo size={72} />
         <div className="text-center">
-          <h2 className="text-3xl font-bold text-[#1A1A1A]">Connect with Family</h2>
-          <p className="text-[#888] mt-2">Enter your number to get started</p>
+          <h2 className="text-3xl font-bold text-[#1A1A1A]">{t('Connect with Family')}</h2>
+          <p className="text-[#888] mt-2">{t('Enter your number to get started')}</p>
         </div>
       </div>
 
       <div className="flex flex-col gap-3 mb-4">
-        <p className="text-center tracking-widest text-xs font-bold text-[#1A1A1A]">PHONE NUMBER</p>
+        <p className="text-center tracking-wide text-xs font-bold text-[#1A1A1A]">{t('Phone Number')}</p>
         <div className="flex gap-2">
           <Select value={countryCode} onValueChange={setCountryCode}>
             <SelectTrigger
@@ -171,15 +190,15 @@ export function PhoneEntry() {
             className="flex-1 px-4 rounded-2xl border-2 border-[#D4CFC0] text-[#1A1A1A] text-center text-lg font-semibold placeholder:text-[#C8C3B4] focus:border-[#7B9EC8] focus-visible:ring-0 h-16"
           />
         </div>
-        <PrimaryBtn onClick={handleContinue}>CONTINUE</PrimaryBtn>
+        <PrimaryBtn onClick={handleContinue}>{t('Continue')}</PrimaryBtn>
       </div>
 
       <div className="mt-auto flex flex-col items-center gap-4">
         <p className="text-center text-sm text-[#888]">
-          We'll send a code to verify.<br />No passwords to remember.
+          {t("We'll send a code to verify.")}<br />{t('No passwords to remember.')}
         </p>
-        <button className="w-full py-3.5 rounded-2xl border-2 border-dashed border-[#C8C3B4] text-sm font-bold tracking-widest text-[#1A1A1A]">
-          NEED HELP? CALL US
+        <button className="w-full py-3.5 rounded-2xl border-2 border-dashed border-[#C8C3B4] text-sm font-bold tracking-wide text-[#1A1A1A]">
+          {t('Need help? Call us')}
         </button>
       </div>
     </Screen>
@@ -189,7 +208,19 @@ export function PhoneEntry() {
 // ─── OTP Verify Screen ────────────────────────────────────────────────────────
 export function OTPVerify() {
   const navigate = useNavigate();
+  const { t, preload } = useTranslation();
   const [otp, setOtp] = useState('');
+
+  useEffect(() => {
+    preload([
+      'Code Sent!',
+      'Enter the 6-digit code from your SMS',
+      'Reading SMS automatically...',
+      'Verify',
+      "Didn't get it?",
+      'Resend',
+    ]);
+  }, [preload]);
 
   const handleVerify = () => navigate('/setup');
 
@@ -204,9 +235,9 @@ export function OTPVerify() {
           <span className="text-2xl">✓</span>
         </div>
         <div className="text-center">
-          <h2 className="text-3xl font-black text-[#1A1A1A]">Code Sent!</h2>
-          <p className="text-[#888] mt-2">Enter the 6-digit code from your SMS</p>
-          <p className="text-[#888] text-sm mt-1">Reading SMS automatically...</p>
+          <h2 className="text-3xl font-extrabold text-[#1A1A1A]">{t('Code Sent!')}</h2>
+          <p className="text-[#888] mt-2">{t('Enter the 6-digit code from your SMS')}</p>
+          <p className="text-[#888] text-sm mt-1">{t('Reading SMS automatically...')}</p>
         </div>
       </div>
 
@@ -228,10 +259,10 @@ export function OTPVerify() {
       </div>
 
       <div className="flex flex-col gap-3">
-        <PrimaryBtn onClick={handleVerify}>VERIFY</PrimaryBtn>
+        <PrimaryBtn onClick={handleVerify}>{t('Verify')}</PrimaryBtn>
         <div className="text-center">
-          <span className="text-[#888] text-sm">Didn't get it? </span>
-          <button className="text-sm font-bold underline text-[#1A1A1A]">Resend</button>
+          <span className="text-[#888] text-sm">{t("Didn't get it?")} </span>
+          <button className="text-sm font-bold underline text-[#1A1A1A]">{t('Resend')}</button>
         </div>
       </div>
     </Screen>
@@ -242,7 +273,19 @@ export function OTPVerify() {
 export function NameSetup() {
   const navigate = useNavigate();
   const { setUserName, readAloud, setReadAloud } = useApp();
+  const { t, preload } = useTranslation();
   const [name, setName] = useState('');
+
+  useEffect(() => {
+    preload([
+      'What should we call you?',
+      'Enter your name...',
+      'Read screens aloud',
+      'Voice reads everything on screen',
+      "Let's Get Started",
+      'You can add more details later',
+    ]);
+  }, [preload]);
 
   const handleStart = () => {
     if (name.trim()) setUserName(name.trim());
@@ -260,12 +303,12 @@ export function NameSetup() {
       </div>
 
       <div className="flex flex-col gap-5">
-        <h2 className="text-xl font-bold text-[#1A1A1A] whitespace-nowrap text-center">What should we call you?</h2>
+        <h2 className="text-xl font-bold text-[#1A1A1A] whitespace-nowrap text-center">{t('What should we call you?')}</h2>
         <Input
           type="text"
           value={name}
           onChange={(e) => setName(e.target.value)}
-          placeholder="Enter your name..."
+          placeholder={t('Enter your name...')}
           className="w-full px-5 py-6 rounded-2xl border-2 border-[#D4CFC0] text-[#1A1A1A] text-lg font-semibold placeholder:text-[#C8C3B4] focus:border-[#7B9EC8] focus-visible:ring-0 h-auto"
         />
 
@@ -278,8 +321,8 @@ export function NameSetup() {
               <Volume2 size={24} color="#1A1A1A" />
             </div>
             <div>
-              <p className="text-base font-semibold text-[#1A1A1A] leading-tight whitespace-nowrap">Read screens aloud</p>
-              <p className="text-sm text-[#888] mt-0.5">Voice reads everything on screen</p>
+              <p className="text-base font-semibold text-[#1A1A1A] leading-tight whitespace-nowrap">{t('Read screens aloud')}</p>
+              <p className="text-sm text-[#888] mt-0.5">{t('Voice reads everything on screen')}</p>
             </div>
           </div>
           <Switch
@@ -292,8 +335,8 @@ export function NameSetup() {
       </div>
 
       <div className="mt-auto flex flex-col gap-3 pt-8">
-        <PrimaryBtn onClick={handleStart}>Let's Get Started</PrimaryBtn>
-        <p className="text-center text-sm text-[#888]">You can add more details later</p>
+        <PrimaryBtn onClick={handleStart}>{t("Let's Get Started")}</PrimaryBtn>
+        <p className="text-center text-sm text-[#888]">{t('You can add more details later')}</p>
       </div>
     </Screen>
   );

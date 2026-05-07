@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router';
-import { ArrowLeft, Plus, Settings, Bell, Shield, ChevronRight, Flame, Flower, Sparkles, User, Check } from 'lucide-react';
+import { ArrowLeft, Plus, Settings, Bell, Shield, ChevronRight, Flame, Flower, Sparkles, User, Check, Globe } from 'lucide-react';
 import { Screen } from './Shared';
 import { useApp } from '../../context/AppContext';
+import { useTranslation } from '../../hooks/useTranslation';
+import { SUPPORTED_LANGUAGES } from '../../services/translation';
 import { Card, CardContent } from '../ui/card';
 import { Separator } from '../ui/separator';
 import { Checkbox } from '../ui/checkbox';
@@ -17,12 +19,33 @@ const FAMILY = [
 // ─── Profile Screen ───────────────────────────────────────────────────────────
 export function ProfileScreen() {
   const navigate = useNavigate();
-  const { userName, streak, stories, gardenFlowers, logout } = useApp();
+  const { userName, streak, stories, gardenFlowers, logout, selectedLanguage } = useApp();
+  const { t, preload } = useTranslation();
+
+  const currentLang = SUPPORTED_LANGUAGES.find((l) => l.code === selectedLanguage);
+
+  useEffect(() => {
+    preload([
+      'My Family',
+      'Manage',
+      'Add Family Member',
+      'Settings',
+      'Notifications',
+      'Daily reminders & updates',
+      'Privacy & Security',
+      'Manage your data',
+      'Language',
+      'App Settings',
+      'Accessibility & more',
+      'Log Out',
+    ]);
+  }, [preload]);
 
   const settings = [
-    { icon: Bell, label: 'Notifications', sub: 'Daily reminders & updates' },
-    { icon: Shield, label: 'Privacy & Security', sub: 'Manage your data' },
-    { icon: Settings, label: 'App Settings', sub: 'Language, accessibility' },
+    { icon: Bell, label: t('Notifications'), sub: t('Daily reminders & updates') },
+    { icon: Shield, label: t('Privacy & Security'), sub: t('Manage your data') },
+    { icon: Globe, label: t('Language'), sub: currentLang ? `${currentLang.nativeName} (${currentLang.name})` : 'English', onClick: () => navigate('/language', { state: { from: 'profile' } }) },
+    { icon: Settings, label: t('App Settings'), sub: t('Accessibility & more') },
   ];
 
   return (
@@ -68,9 +91,9 @@ export function ProfileScreen() {
         {/* My Family */}
         <div>
           <div className="flex items-center justify-between mb-3">
-            <p className="text-sm font-bold tracking-wide text-[#1A1A1A]">MY FAMILY</p>
+            <p className="text-sm font-bold tracking-wide text-[#1A1A1A]">{t('My Family')}</p>
             <button onClick={() => navigate('/profile/contacts')} className="text-xs font-bold text-[#7B9EC8]">
-              Manage →
+              {t('Manage')} →
             </button>
           </div>
           <Card className="rounded-2xl border-2 border-[#D4CFC0] overflow-hidden shadow-sm">
@@ -116,17 +139,17 @@ export function ProfileScreen() {
           onClick={() => navigate('/profile/contacts')}
           className="w-full py-3.5 rounded-2xl border-2 border-dashed border-[#C8C3B4] flex items-center justify-center gap-2 font-bold text-[#888] hover:border-[#C1622F] hover:text-[#C1622F] transition-colors"
         >
-          <Plus size={18} /> Add Family Member
+          <Plus size={18} /> {t('Add Family Member')}
         </button>
 
         {/* Settings */}
         <div>
-            <p className="text-sm font-bold tracking-wide text-[#1A1A1A] mb-3">SETTINGS</p>
+            <p className="text-sm font-bold tracking-wide text-[#1A1A1A] mb-3">{t('Settings')}</p>
           <Card className="rounded-2xl border-2 border-[#D4CFC0] overflow-hidden shadow-sm">
             <CardContent className="p-0">
-              {settings.map(({ icon: Icon, label, sub }, i) => (
+              {settings.map(({ icon: Icon, label, sub, onClick }, i) => (
                 <div key={label}>
-                  <button className="w-full flex items-center gap-3 px-4 py-3.5 hover:bg-[#F5F1E8] transition-colors text-left">
+                  <button onClick={onClick} className="w-full flex items-center gap-3 px-4 py-3.5 hover:bg-[#F5F1E8] transition-colors text-left">
                     <div className="w-9 h-9 rounded-xl bg-[#F5F1E8] border border-[#D4CFC0] flex items-center justify-center flex-shrink-0">
                       <Icon size={17} color="#888" />
                     </div>
@@ -148,7 +171,7 @@ export function ProfileScreen() {
           onClick={() => { logout(); navigate('/'); }}
           className="w-full py-3.5 rounded-2xl border-2 border-red-200 font-bold text-red-500 bg-red-50 hover:bg-red-100 transition-colors mb-2"
         >
-          Log Out
+          {t('Log Out')}
         </button>
       </div>
     </Screen>

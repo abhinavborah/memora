@@ -36,6 +36,9 @@ interface AppState {
   setSaathiCorner: (s: 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right') => void;
   hasSeenWelcome: boolean;
   setHasSeenWelcome: (v: boolean) => void;
+  // Language
+  selectedLanguage: string;
+  setSelectedLanguage: (l: string) => void;
   logout: () => void;
 }
 
@@ -46,6 +49,11 @@ const INITIAL_STORIES: Story[] = [
   { id: '2', title: 'School Days Memories', emoji: '📚', daysAgo: 5, transcript: 'When I was in school, we used to walk 3 miles every morning...', artStyle: 'sketch', videoReady: true },
   { id: '3', title: 'My Wedding Day', emoji: '💍', daysAgo: 12, transcript: 'It was the most beautiful day of my life, surrounded by family...', artStyle: 'pixar', videoReady: true },
 ];
+
+function getInitialLanguage(): string {
+  if (typeof window === 'undefined') return 'en-IN';
+  return localStorage.getItem('memora_language') || 'en-IN';
+}
 
 export function AppProvider({ children }: { children: React.ReactNode }) {
   const [userName, setUserName] = useState('Rajesh');
@@ -59,8 +67,16 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   const [selectedArtStyle, setSelectedArtStyle] = useState('');
   const [saathiCorner, setSaathiCorner] = useState<'top-left' | 'top-right' | 'bottom-left' | 'bottom-right'>('bottom-right');
   const [hasSeenWelcome, setHasSeenWelcome] = useState(false);
+  const [selectedLanguage, setSelectedLanguageState] = useState<string>(getInitialLanguage);
 
   const [stories, setStories] = useState<Story[]>(INITIAL_STORIES);
+
+  const setSelectedLanguage = (lang: string) => {
+    setSelectedLanguageState(lang);
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('memora_language', lang);
+    }
+  };
 
   const logout = () => {
     setGardenFlowers(3);
@@ -72,6 +88,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     setReadAloud(false);
     setPhoneNumber('');
     setHasSeenWelcome(false);
+    setSelectedLanguage('en-IN');
   };
 
   return (
@@ -88,6 +105,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       selectedArtStyle, setSelectedArtStyle,
       saathiCorner, setSaathiCorner,
       hasSeenWelcome, setHasSeenWelcome,
+      selectedLanguage, setSelectedLanguage,
       logout,
     }}>
       {children}
