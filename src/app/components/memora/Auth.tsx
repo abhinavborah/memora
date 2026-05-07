@@ -225,7 +225,7 @@ export function NameSetup() {
       </div>
 
       <div className="flex flex-col gap-5">
-        <h2 className="text-2xl font-black text-[#1A1A1A]">What should we call you?</h2>
+        <h2 className="text-xl font-bold text-[#1A1A1A] whitespace-nowrap text-center">What should we call you?</h2>
         <Input
           type="text"
           value={name}
@@ -243,7 +243,7 @@ export function NameSetup() {
               <Volume2 size={24} color="#1A1A1A" />
             </div>
             <div>
-              <p className="text-lg font-semibold text-[#1A1A1A] leading-tight">Read screens aloud</p>
+              <p className="text-base font-semibold text-[#1A1A1A] leading-tight whitespace-nowrap">Read screens aloud</p>
               <p className="text-sm text-[#888] mt-0.5">Voice reads everything on screen</p>
             </div>
           </div>
