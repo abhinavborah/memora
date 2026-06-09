@@ -11,7 +11,8 @@ Memora is a platform which aims to bridge the gap between grandparents and grand
 
 ## Youtube Demo
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/f2jg5Xcj7KE?si=LVxlzR8gXCelaBMR" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+[![Watch the video](./demo/yt.png)](https://www.youtube.com/watch?v=f2jg5Xcj7KE)
+[Full Video](https://www.youtube.com/watch?v=f2jg5Xcj7KE)
 
 ## Research Papers and Report
 
